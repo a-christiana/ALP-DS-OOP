@@ -789,7 +789,7 @@ public class PoliSystem {
 
         do{
             System.out.println("=== PATIENT MENU ===");
-            System.out.println("1. View Profile\n2. Make Appointment\n3. Logout\nInput: ");
+            System.out.print("1. View Profile\n2. Make Appointment\n3. Logout\nInput: ");
 
             inputP = scan.nextInt();
 
@@ -813,6 +813,29 @@ public class PoliSystem {
     }
 
     public void makeAppointment(Patient patient){
+        System.out.println("=== MAKE APPOINTMENT ===");
 
+        if(doctors.isEmpty()){
+            System.out.println("Mohon maaf. Belum ada dokter.");
+            return;
+        }
+
+        ArrayList<Doctor> doctorList = new ArrayList<>(doctors.values());
+
+        for (int i = 0; i < doctorList.size(); i++) {
+            Doctor doctor = doctorList.get(i);
+
+            System.out.println((i+1) + ". " + doctor.getFullName() + " - " + doctor.getSpecialization());
+        }
+
+        System.out.print("Choose Doctor: ");
+        int chooseD = scan.nextInt();
+
+        if (chooseD < 1 || chooseD > doctorList.size()){
+            System.out.println("Input error. Please Try Again.");
+            return;
+        }
+
+        Doctor selectedD = doctorList.get(chooseD - 1)
     }
 }
