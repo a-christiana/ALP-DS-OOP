@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+
 import logic.PoliSystem;
 
 public class DummyData {
@@ -63,5 +65,42 @@ public class DummyData {
         x.addMedicalRecord(mr3, p3);
         x.addMedicalRecord(mr4, p4);
         x.addMedicalRecord(mr5, p5);
+        ArrayList<Medicine> medicines = new ArrayList<>();
+
+        Medicine m1 = new Medicine("M001", "Aspirin", 15000, true);
+        Medicine m2 = new Medicine("M002", "Atorvastatin", 35000, true);
+        Medicine m3 = new Medicine("M003", "Bisoprolol", 28000, true);
+
+        Medicine m4 = new Medicine("M004", "Paracetamol Syrup", 18000, false);
+        Medicine m5 = new Medicine("M005", "Amoxicillin Syrup", 22000, true);
+        Medicine m6 = new Medicine("M006", "Vitamin C Kids", 12000, false);
+
+        Medicine m7 = new Medicine("M007", "Mefenamic Acid", 17000, true);
+        Medicine m8 = new Medicine("M008", "Clindamycin", 26000, true);
+        Medicine m9 = new Medicine("M009", "Mouthwash", 20000, false);
+
+        Medicine m10 = new Medicine("M010", "Acne Cream", 30000, false);
+        Medicine m11 = new Medicine("M011", "Antifungal Cream", 27000, false);
+        Medicine m12 = new Medicine("M012", "Cetirizine", 15000, false);
+
+        Medicine m13 = new Medicine("M013", "Ibuprofen", 14000, false);
+        Medicine m14 = new Medicine("M014", "Cough Syrup", 19000, false);
+        Medicine m15 = new Medicine("M015", "Antacid", 13000, false);
+
+        medicines.add(m1);
+        medicines.add(m2);
+        medicines.add(m3);
+        medicines.add(m4);
+        medicines.add(m5);
+        medicines.add(m6);
+        medicines.add(m7);
+        medicines.add(m8);
+        medicines.add(m9);
+        medicines.add(m10);
+        medicines.add(m11);
+        medicines.add(m12);
+        medicines.add(m13);
+        medicines.add(m14);
+        medicines.add(m15);
     }
 }
