@@ -42,12 +42,12 @@ public class PoliSystem {
 
     public void start() {
         int choose = 0;
+        System.out.println();
         System.out.print("1. Login\n2. Register\nChoose Menu: ");
         choose = scan.nextInt();
         System.out.println();
         String usernametext;
         String passwordtext;
-        String roletext;
         switch (choose) {
             case 1:
                 System.out.println();
@@ -61,12 +61,12 @@ public class PoliSystem {
 
                 if (user == null) {
                     System.out.println("username not found!");
-                    return;
+                    start();
                 }
 
                 if (!user.getPassword().equals(passwordtext)) {
                     System.out.println("Wrong password");
-                    return;
+                    start();
                 }
 
                 System.out.println("Login success");
@@ -97,14 +97,14 @@ public class PoliSystem {
 
                 if (users.containsKey(usernameText)) {
                     System.out.println("Username sudah digunakan.");
-                    return;
+                    start();
                 }
 
                 System.out.print("Password: ");
                 String passwordText = scan.next() + scan.nextLine();
 
                 String idUser = "U" + String.format("%05d", users.size() + 1);
-                String idPatient = "P" + String.format("%03d", patients.size() + 1);
+                String idPatient = "P" + String.format("%05d", patients.size() + 1);
 
                 System.out.print("Full Name: ");
                 String fullName = scan.next() + scan.nextLine();
@@ -135,7 +135,8 @@ public class PoliSystem {
                 System.out.println("Patient ID : " + idPatient);
                 start();
             default:
-                break;
+                System.out.println("Please input from 1-5");
+                start();
         }
     }
 
@@ -147,6 +148,7 @@ public class PoliSystem {
         System.out.println("2. Kelola Obat");
         System.out.println("3. Kelola Pasien");
         System.out.println("4. Lihat Jadwal Appointment");
+        System.out.println("5. Logout");
         System.out.print("Input: ");
         input = scan.nextInt();
         System.out.println();
@@ -163,48 +165,370 @@ public class PoliSystem {
                     System.out.println("1. View Medicine List");
                     System.out.println("2. Add New Medicine");
                     System.out.println("3. Delete Medicine");
+                    System.out.println("4. Back");
                     System.out.print("Input: ");
                     in = scan.nextInt();
                     System.out.println();
 
                     switch (in) {
                         case 1:
-                            System.out.println("=== MEDICINE LIST ===");
-                            int no = 1;
-                            for (Medicine med : medicines.values()) {
-                                System.out.print(no + ". ");
-                                med.showDetail();
-                                no++;
-                            }
-                            System.out.println();
+                            showMedicine();
                             break;
 
                         case 2:
-                            System.out.println("=== NEW MEDICINE ===");
-                            System.out.print("Nama Obat: ");
-                            String namaobat = scan.next() + scan.nextLine();
-                            System.out.print("Harga Obat: ");
-                            int hargaobat = scan.nextInt();
-                            System.out.print("Controlled Substance (y/n): ");
-                            String controlled = scan.next() + scan.nextLine();
-                            String id = m.getIdMedicine() + medicines.size();
-                            medicines.put(id, new Medicine(id, namaobat, hargaobat, m.isControlled()));
-                            System.out.println();
+                            addMedicineMenu();
                             break;
 
                         case 3:
-                            System.out.println("=== DELETE MEDICINE ===");
-                            System.out.print("Pilih ID: ");
-                            String idhapus = scan.next() + scan.nextLine().toUpperCase();
-                            String namehapus = medicines.get(idhapus).medicineName;
-                            medicines.remove(idhapus);
-                            System.out.println(namehapus + " telah dihapus");
+                            deleteMedicineMenu();
                             break;
+                        
+                        default:
+                            System.out.println("Please input from 1-4");
+                            UserAdmin();
                     }
 
-                } while (in != 0);
-
+                } while (in != 4);
                 break;
+
+            case 3:
+                patientMenu();
+                break;
+
+            default:
+                System.out.println("Please input from 1-5");
+                UserAdmin();
+        }
+    }
+
+    public void patientMenu() {
+        int inp;
+
+        do {
+            System.out.println();
+            System.out.println("=== PATIENT MENU ===");
+            System.out.println("1. View Patient List");
+            System.out.println("2. Add New Patient");
+            System.out.println("3. Select Patient");
+            System.out.println("4. Back");
+            System.out.print("Input: ");
+
+            inp = scan.nextInt();
+            scan.nextLine();
+
+            switch (inp) {
+                case 1:
+                    showPatient();
+                    break;
+
+                case 2:
+                    addNewPatient();
+                    break;
+
+                case 3:
+                    selectPatient();
+                    break;
+
+                default:
+                    System.out.println("Please input from 1-4");
+                    patientMenu();
+            }
+        } while (inp != 0);
+    }
+
+    public void selectPatient() {
+        System.out.println();
+        int inp;
+
+        do {
+            System.out.println("=== SELECT PATIENT ===");
+            System.out.println("1. View Patient List");
+            System.out.println("2. Search Patient by ID or Name");
+            System.out.println("3. Back");
+            System.out.print("Input: ");
+
+            inp = scan.nextInt();
+            scan.nextLine();
+
+            Patient selectedPatient = null;
+
+            switch (inp) {
+                case 1:
+                    selectedPatient = choosePatientFromList();
+                    break;
+
+                case 2:
+                    selectedPatient = searchPatientByIdOrName();
+                    break;
+
+                case 3:
+                    patientMenu();
+                    break;
+
+                default:
+                    System.out.println("Please input from 1-3");
+                    selectPatient();
+            }
+
+            if (selectedPatient != null) {
+                selectedPatientActionMenu(selectedPatient);
+            }
+
+            System.out.println();
+        } while (inp != 0);
+    }
+
+    public Patient choosePatientFromList() {
+        System.out.println();
+
+        if (patients.isEmpty()) {
+            System.out.println("Belum ada pasien.");
+            return null;
+        }
+
+        ArrayList<Patient> patientList = new ArrayList<>(patients.values());
+
+        patientList.sort((p1, p2) -> p1.getIdPatient().compareTo(p2.getIdPatient()));
+
+        System.out.println("=== PATIENT LIST ===");
+
+        for (int i = 0; i < patientList.size(); i++) {
+            Patient patient = patientList.get(i);
+
+            System.out.println((i + 1) + ". "
+                    + patient.getIdPatient()
+                    + " | "
+                    + patient.getFullName());
+        }
+
+        System.out.print("Choose patient number: ");
+        int choice = scan.nextInt();
+        scan.nextLine();
+
+        if (choice < 1 || choice > patientList.size()) {
+            System.out.println("Pilihan tidak valid.");
+            return null;
+        }
+
+        return patientList.get(choice - 1);
+    }
+
+    public Patient searchPatientByIdOrName() {
+        System.out.println();
+        System.out.print("Input patient ID or name: ");
+        String keyword = scan.nextLine().toLowerCase();
+
+        ArrayList<Patient> result = new ArrayList<>();
+
+        for (Patient patient : patients.values()) {
+            boolean matchId = patient.getIdPatient().toLowerCase().contains(keyword);
+            boolean matchName = patient.getFullName().toLowerCase().contains(keyword);
+
+            if (matchId || matchName) {
+                result.add(patient);
+            }
+        }
+
+        if (result.isEmpty()) {
+            System.out.println("Pasien tidak ditemukan.");
+            return null;
+        }
+
+        result.sort((p1, p2) -> p1.getIdPatient().compareTo(p2.getIdPatient()));
+
+        System.out.println("=== SEARCH RESULT ===");
+
+        for (int i = 0; i < result.size(); i++) {
+            Patient patient = result.get(i);
+
+            System.out.println((i + 1) + ". "
+                    + patient.getIdPatient()
+                    + " | "
+                    + patient.getFullName());
+        }
+
+        System.out.print("Choose patient number: ");
+        int choice = scan.nextInt();
+        scan.nextLine();
+
+        if (choice < 1 || choice > result.size()) {
+            System.out.println("Pilihan tidak valid.");
+            return null;
+        }
+
+        return result.get(choice - 1);
+    }
+
+    public void selectedPatientActionMenu(Patient patient) {
+        System.out.println();
+        int input;
+
+        do {
+            System.out.println("=== SELECTED PATIENT ===");
+            System.out.println("Patient ID : " + patient.getIdPatient());
+            System.out.println("Name       : " + patient.getFullName());
+            System.out.println();
+            System.out.println("1. View Patient Detail");
+            System.out.println("2. View Medical Records");
+            System.out.println("3. Back");
+            System.out.print("Input: ");
+
+            input = scan.nextInt();
+            scan.nextLine();
+
+            switch (input) {
+                case 1:
+                    patient.showDetail();
+                    break;
+
+                case 2:
+                    viewMedicalRecordsByPatient(patient);
+                    break;
+
+                case 3:
+                    selectPatient();
+                    break;
+
+                default:
+                    System.out.println("Please input from 1-3");
+                    selectedPatientActionMenu(patient);
+            }
+
+            System.out.println();
+
+        } while (input != 0);
+    }
+
+    public void viewMedicalRecordsByPatient(Patient patient) {
+        System.out.println("=== MEDICAL RECORDS ===");
+
+        if (patient.getMedicalRecords().isEmpty()) {
+            System.out.println("Pasien ini belum memiliki medical record.");
+            return;
+        }
+
+        int no = 1;
+
+        for (MedicalRecord record : patient.getMedicalRecords()) {
+            System.out.println("Medical Record " + no);
+            record.showDetail();
+            System.out.println("--------------------");
+            no++;
+        }
+    }
+
+    public void showPatient() {
+        System.out.println();
+        System.out.println("=== PATIENT LIST ===");
+
+        if (patients.isEmpty()) {
+            System.out.println("Belum ada list pasien");
+            return;
+        }
+
+        ArrayList<Patient> patientList = new ArrayList<>(patients.values());
+        patientList.sort((p1, p2) -> p1.getIdPatient().compareTo(p2.getIdPatient()));
+
+        int no = 1;
+
+        for (Patient patient : patientList) {
+            System.out.println();
+            System.out.println(no + ". " + patient.getIdPatient() + "\nNIK: " + patient.getNik() + "\nNama Pasien: "
+                    + patient.getFullName() + "\nUsername: " + patient.getUname() + "\nNomor telepon: "
+                    + patient.getTelepon());
+            no++;
+        }
+    }
+
+    public void addNewPatient() {
+        System.out.println();
+        System.out.println("=== NEW PATIENT ===");
+
+        System.out.print("Password: ");
+        String passwordText = scan.next() + scan.nextLine();
+
+        String idUser = "U" + String.format("%05d", users.size() + 1);
+        String idPatient = "P" + String.format("%05d", patients.size() + 1);
+
+        System.out.print("Full Name: ");
+        String fullName = scan.next() + scan.nextLine();
+
+        String username = generatePatientUsername(fullName);
+
+        System.out.print("NIK: ");
+        String nik = scan.next() + scan.nextLine();
+
+        System.out.print("Phone Number: ");
+        String phoneNumber = scan.next() + scan.nextLine();
+
+        System.out.print("Urgency Level 1-5: ");
+        int urgencyLevel = scan.nextInt();
+
+        Patient newPatient = new Patient(
+                idUser,
+                username,
+                passwordText,
+                idPatient,
+                fullName,
+                nik,
+                phoneNumber,
+                urgencyLevel);
+
+        addPatient(newPatient);
+
+        System.out.println("Register berhasil!");
+        System.out.println("User ID    : " + idUser);
+        System.out.println("Patient ID : " + idPatient);
+    }
+
+    public void showMedicine() {
+        System.out.println("=== MEDICINE LIST ===");
+        int no = 1;
+        if (medicines.size() == 0) {
+            System.out.println("Belum ada obat");
+            System.out.println();
+        } else {
+            for (Medicine med : medicines.values()) {
+                System.out.print(no + ".");
+                med.showDetail();
+                System.out.println("--------------------");
+                System.out.println();
+                no++;
+            }
+            System.out.println();
+        }
+    }
+
+    public void addMedicineMenu() {
+        System.out.println("=== NEW MEDICINE ===");
+        System.out.print("Nama Obat: ");
+        String namaobat = scan.next() + scan.nextLine();
+
+        System.out.print("Harga Obat: ");
+        int hargaobat = scan.nextInt();
+
+        System.out.print("Controlled Substance (y/n): ");
+        String controlled = scan.next() + scan.nextLine();
+
+        String idMed = "M" + String.format("%03d", medicines.size() + 1);
+        medicines.put(idMed, new Medicine(idMed, namaobat, hargaobat, m.isitControlled(controlled)));
+        System.out.println();
+        showMedicine();
+    }
+
+    public void deleteMedicineMenu() {
+        System.out.println("=== DELETE MEDICINE ===");
+        if (medicines.size() == 0) {
+            System.out.println("Belum ada obat");
+            System.out.println();
+        } else {
+            System.out.print("Pilih ID: ");
+            String idhapus = scan.next() + scan.nextLine().toUpperCase();
+            String namehapus = medicines.get(idhapus).medicineName;
+            medicines.remove(idhapus);
+            System.out.println(namehapus + " telah dihapus");
+            System.out.println();
+            showMedicine();
         }
     }
 
@@ -231,11 +555,15 @@ public class PoliSystem {
 
             case 3:
                 deleteDoctorMenu();
+                break;
 
             case 4:
                 UserAdmin();
+                break;
+
             default:
-                throw new AssertionError();
+                System.out.println("Please input from 1-5");
+                doctorMenu();
         }
     }
 
@@ -273,7 +601,7 @@ public class PoliSystem {
 
     public void addDoctorMenu() {
         System.out.println("=== NEW DOCTOR ===");
-        String idUser = "U" + String.format("%03d", users.size() + 1);
+        String idUser = "U" + String.format("%05d", users.size() + 1);
         String idDoctor = "D" + String.format("%03d", doctors.size() + 1);
 
         showSpecialization();
@@ -364,6 +692,20 @@ public class PoliSystem {
         }
 
         return "dokter" + code + String.format("%02d", count);
+    }
+
+    public String generatePatientUsername(String fullName) {
+        String firstName = fullName.split(" ")[0].toLowerCase();
+
+        int count = 1;
+
+        for (Patient patient : patients.values()) {
+            if (patient.getUname().startsWith(firstName)) {
+                count++;
+            }
+        }
+
+        return firstName + String.format("%02d", count);
     }
 
     public void addUser(User user) {

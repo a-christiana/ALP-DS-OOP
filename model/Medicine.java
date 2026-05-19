@@ -7,7 +7,7 @@ public class Medicine {
     public boolean controlledSubstance;
     
     public Medicine() {
-        idMedicine = "M";
+        idMedicine = "";
         medicineName = "";
         price = 0;
         controlledSubstance = false;
@@ -21,7 +21,17 @@ public class Medicine {
     }
     
     public void showDetail(){
-        System.out.println(getIdMedicine() + " - nama: " + medicineName + " - price: " + price + " rupiah - controlled: " + controlledSubstance);
+        System.out.println("Medicine ID: " + getIdMedicine() + "\nNama: " + medicineName + "\nPrice: " + price + " rupiah \nControlled: " + controlledSubstance);
+    }
+
+    public boolean isitControlled(String y){
+        if(y.equalsIgnoreCase("y")){
+            controlledSubstance = true;
+            return true;
+        } else{
+            controlledSubstance = false;
+            return false;
+        }
     }
     
     public boolean isControlled(){
@@ -43,4 +53,6 @@ public class Medicine {
     public void setIdMedicine(String idMedicine) {
         this.idMedicine = idMedicine;
     }
+
+    
 }
