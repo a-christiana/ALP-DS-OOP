@@ -45,5 +45,23 @@ public class DummyData {
         x.addPatient(p3);
         x.addPatient(p4);
         x.addPatient(p5);
+
+        Prescription pr1 = null;
+        Prescription pr2 = null;
+        Prescription pr3 = null;
+        Prescription pr4 = null;
+        Prescription pr5 = null;
+
+        MedicalRecord mr1 = new MedicalRecord("MR001", p1, d10, "Pusing, demam, dan nyeri otot", "Influenza",  "Pemberian obat penurun demam dan istirahat cukup", pr1);
+        MedicalRecord mr2 = new MedicalRecord("MR002", p2, d8, "Gatal dan bentol merah pada tangan dan leher", "Gatal dan bentol merah pada tangan dan leher",  "Pemberian antihistamin dan salep anti inflamasi", pr2);
+        MedicalRecord mr3 = new MedicalRecord("MR003", p3, d5, "Nyeri gigi bagian belakang dan gusi bengkak",  "Karies gigi dan radang gusi",    "Pembersihan karang gigi dan pemberian antibiotik", pr3);
+        MedicalRecord mr4 = new MedicalRecord("MR004", p4, d4, "Demam tinggi, batuk, dan nafsu makan menurun",   "Infeksi Saluran Pernapasan Atas pada anak", "Pemberian sirup penurun demam dan vitamin anak", pr4);
+        MedicalRecord mr5 = new MedicalRecord("MR005", p5, d1, "Nyeri dada ringan dan sesak napas saat aktivitas berat",  "Hipertensi dan angina ringan",  "Pemberian obat penurun tekanan darah dan anjuran mengurangi aktivitas berat", pr5);
+
+        x.addMedicalRecord(mr1, p1);
+        x.addMedicalRecord(mr2, p2);
+        x.addMedicalRecord(mr3, p3);
+        x.addMedicalRecord(mr4, p4);
+        x.addMedicalRecord(mr5, p5);
     }
 }
