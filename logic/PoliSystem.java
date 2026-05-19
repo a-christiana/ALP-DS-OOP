@@ -85,9 +85,6 @@ public class PoliSystem {
 
                     UserPatient((Patient) user);
 
-                    // System.out.println("=== PATIENT MENU ===");
-
-                    // user.showDetail();
                 }
                 break;
 
@@ -788,21 +785,36 @@ public class PoliSystem {
         int inputP;
 
         do{
+            System.out.println();
             System.out.println("=== PATIENT MENU ===");
-            System.out.println("1. View Profile\n2. Make Appointment\n3. Logout\nInput: ");
+            System.out.println("Hello, " + patient.getFullName());
+            System.out.println("1. View Doctor List");
+            System.out.println("2. Make Appointment");
+            System.out.println("3. Cancel Appointment");
+            System.out.println("4. View Booking History");
+            System.out.println("5. View Hospital Queue");
+            System.out.println("6. View Pharmacy Queue");
+            System.out.println("7. Buy Medicine");
+            System.out.println("8. Profile");
+            System.out.println("9. Logout");
+            System.out.print("Input: ");
 
             inputP = scan.nextInt();
 
             switch (inputP){
                 case 1:
-                    patient.showDetail();
+                    showDoctorForPatient();
                     break;
                 
                 case 2: 
                     makeAppointment(patient);
                     break;
 
-                case 3:
+                case 8:
+                    patient.showDetail();
+                    break;
+
+                case 9:
                     start();
                     break;
 
@@ -811,6 +823,24 @@ public class PoliSystem {
             }
         } while (inputP != 3);
     }
+
+    public void showDoctorForPatient() {
+    System.out.println();
+    System.out.println("=== DOCTOR LIST ===");
+
+    if (doctors.isEmpty()) {
+        System.out.println("Belum ada dokter.");
+        return;
+    }
+
+    ArrayList<Doctor> doctorList = new ArrayList<>(doctors.values());
+    doctorList.sort((d1, d2) -> d1.getIdDoctor().compareTo(d2.getIdDoctor()));
+
+    for (Doctor doctor : doctorList) {
+        doctor.showDetail();
+        System.out.println("--------------------");
+    }
+}
 
     public void makeAppointment(Patient patient){
 
