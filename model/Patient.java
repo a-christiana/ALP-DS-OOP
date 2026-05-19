@@ -109,11 +109,13 @@ public class Patient extends User{
 
     @Override
     public void showDetail() {
+        System.out.println();
         System.out.println( "Patient ID: " + idPatient +
                 "\nName: " + fullname +
                 "\nNIK: " + nik +
                 "\nTelepon: " + telepon +
                 "\nUrgency Level: " + urgencyLevel +
                 "\nRegistration Time: " + registDateTime);
+        System.out.println();
     }
 }
