@@ -48,59 +48,67 @@ public class DummyData {
         x.addPatient(p4);
         x.addPatient(p5);
 
-        Prescription pr1 = null;
-        Prescription pr2 = null;
-        Prescription pr3 = null;
-        Prescription pr4 = null;
-        Prescription pr5 = null;
+        // Influenza
+        Medicine m1 = new Medicine("M001", "Paracetamol", 12000, false);
+        Medicine m2 = new Medicine("M002", "Oseltamivir", 45000, true);
+        
 
+        // Alergi / gatal bentol merah
+        Medicine m3 = new Medicine("M003", "Cetirizine", 18000, false);
+        Medicine m4 = new Medicine("M004", "Hydrocortisone Cream", 25000, false);
+
+        // Karies gigi dan radang gusi
+        Medicine m5 = new Medicine("M005", "Amoxicillin", 30000, true);
+        Medicine m6 = new Medicine("M006", "Mefenamic Acid", 20000, true);
+
+        // ISPA anak
+        Medicine m7 = new Medicine("M007", "Paracetamol Syrup", 17000, false);
+        Medicine m8 = new Medicine("M008", "Vitamin C Kids", 15000, false);
+
+        // Hipertensi dan angina ringan
+        Medicine m9 = new Medicine("M009", "Amlodipine", 40000, true);
+        Medicine m10 = new Medicine("M010", "Nitroglycerin", 55000, true);
+
+        x.addMedicine(m1);
+        x.addMedicine(m2);
+        x.addMedicine(m3);
+        x.addMedicine(m4);
+        x.addMedicine(m5);
+        x.addMedicine(m6);
+        x.addMedicine(m7);
+        x.addMedicine(m8);
+        x.addMedicine(m9);
+        x.addMedicine(m10);
+
+        Prescription pr1 = new Prescription("P001", p1, d10);
+        Prescription pr2 = new Prescription("P002", p2, d8);
+        Prescription pr3 = new Prescription("P003", p3, d5);
+        Prescription pr4 = new Prescription("P004", p4, d4);
+        Prescription pr5 = new Prescription("P005", p5, d1);
+
+        pr1.addMedicine(m1, 2);
+        pr1.addMedicine(m2, 1);
+        pr2.addMedicine(m3, 3);
+        pr2.addMedicine(m4, 1);
+        pr3.addMedicine(m5, 1);
+        pr3.addMedicine(m6, 1);
+        pr4.addMedicine(m7, 1);
+        pr4.addMedicine(m8, 4);
+        pr5.addMedicine(m9, 1);
+        pr5.addMedicine(m10, 1);
+        
         MedicalRecord mr1 = new MedicalRecord("MR001", p1, d10, "Pusing, demam, dan nyeri otot", "Influenza",  "Pemberian obat penurun demam dan istirahat cukup", pr1);
         MedicalRecord mr2 = new MedicalRecord("MR002", p2, d8, "Gatal dan bentol merah pada tangan dan leher", "Gatal dan bentol merah pada tangan dan leher",  "Pemberian antihistamin dan salep anti inflamasi", pr2);
         MedicalRecord mr3 = new MedicalRecord("MR003", p3, d5, "Nyeri gigi bagian belakang dan gusi bengkak",  "Karies gigi dan radang gusi",    "Pembersihan karang gigi dan pemberian antibiotik", pr3);
         MedicalRecord mr4 = new MedicalRecord("MR004", p4, d4, "Demam tinggi, batuk, dan nafsu makan menurun",   "Infeksi Saluran Pernapasan Atas pada anak", "Pemberian sirup penurun demam dan vitamin anak", pr4);
         MedicalRecord mr5 = new MedicalRecord("MR005", p5, d1, "Nyeri dada ringan dan sesak napas saat aktivitas berat",  "Hipertensi dan angina ringan",  "Pemberian obat penurun tekanan darah dan anjuran mengurangi aktivitas berat", pr5);
-
+        
         x.addMedicalRecord(mr1, p1);
         x.addMedicalRecord(mr2, p2);
         x.addMedicalRecord(mr3, p3);
         x.addMedicalRecord(mr4, p4);
         x.addMedicalRecord(mr5, p5);
-        ArrayList<Medicine> medicines = new ArrayList<>();
-
-        Medicine m1 = new Medicine("M001", "Aspirin", 15000, true);
-        Medicine m2 = new Medicine("M002", "Atorvastatin", 35000, true);
-        Medicine m3 = new Medicine("M003", "Bisoprolol", 28000, true);
-
-        Medicine m4 = new Medicine("M004", "Paracetamol Syrup", 18000, false);
-        Medicine m5 = new Medicine("M005", "Amoxicillin Syrup", 22000, true);
-        Medicine m6 = new Medicine("M006", "Vitamin C Kids", 12000, false);
-
-        Medicine m7 = new Medicine("M007", "Mefenamic Acid", 17000, true);
-        Medicine m8 = new Medicine("M008", "Clindamycin", 26000, true);
-        Medicine m9 = new Medicine("M009", "Mouthwash", 20000, false);
-
-        Medicine m10 = new Medicine("M010", "Acne Cream", 30000, false);
-        Medicine m11 = new Medicine("M011", "Antifungal Cream", 27000, false);
-        Medicine m12 = new Medicine("M012", "Cetirizine", 15000, false);
-
-        Medicine m13 = new Medicine("M013", "Ibuprofen", 14000, false);
-        Medicine m14 = new Medicine("M014", "Cough Syrup", 19000, false);
-        Medicine m15 = new Medicine("M015", "Antacid", 13000, false);
-
-        medicines.add(m1);
-        medicines.add(m2);
-        medicines.add(m3);
-        medicines.add(m4);
-        medicines.add(m5);
-        medicines.add(m6);
-        medicines.add(m7);
-        medicines.add(m8);
-        medicines.add(m9);
-        medicines.add(m10);
-        medicines.add(m11);
-        medicines.add(m12);
-        medicines.add(m13);
-        medicines.add(m14);
-        medicines.add(m15);
+        
+        
     }
 }
