@@ -83,7 +83,7 @@ public class PoliSystem {
 
                 } else if (user.getRole() == Role.PATIENT) {
 
-                    UserPatient();
+                    UserPatient((Patient) user);
 
                     // System.out.println("=== PATIENT MENU ===");
 
@@ -784,7 +784,35 @@ public class PoliSystem {
         pharmacyQueue.offer(prescription);
     }
 
-    public void UserPatient(){
-        
+    public void UserPatient(Patient patient){
+        int inputP;
+
+        do{
+            System.out.println("=== PATIENT MENU ===");
+            System.out.println("1. View Profile\n2. Make Appointment\n3. Logout\nInput: ");
+
+            inputP = scan.nextInt();
+
+            switch (inputP){
+                case 1:
+                    patient.showDetail();
+                    break;
+                
+                case 2: 
+                    makeAppointment(patient);
+                    break;
+
+                case 3:
+                    start();
+                    break;
+
+                default:
+                    System.out.println("Please input 1-3");
+            }
+        } while (inputP != 3);
+    }
+
+    public void makeAppointment(Patient patient){
+
     }
 }
