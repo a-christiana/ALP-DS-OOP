@@ -83,9 +83,11 @@ public class PoliSystem {
 
                 } else if (user.getRole() == Role.PATIENT) {
 
-                    System.out.println("=== PATIENT MENU ===");
+                    UserPatient();
 
-                    user.showDetail();
+                    // System.out.println("=== PATIENT MENU ===");
+
+                    // user.showDetail();
                 }
                 break;
 
@@ -195,10 +197,38 @@ public class PoliSystem {
                 patientMenu();
                 break;
 
+            case 4:
+                showAppointment();
+                break;
+
             default:
                 System.out.println("Please input from 1-5");
                 UserAdmin();
         }
+    }
+
+    public void showAppointment(){
+        System.out.println("=== APPOINTMENT LIST ===");
+
+        if (appointments.isEmpty()){
+            System.out.println("Belum ada Appointment.");
+            return;
+        }
+
+        int no = 1;
+
+        for (Appointment appointment : appointments){
+            System.out.println("Appointment " + no);
+
+            System.out.println("Patient: " + appointment.getPatient().getFullName());
+            System.out.println("Doctor: " + appointment.getDoctor().getFullName());
+            System.out.println("Date: " + appointment.appointmentDate());
+            System.out.println("Status: " + appointment.getAppointmentStatus());
+
+            System.out.println("----------------------------------");
+            no++;
+        }
+
     }
 
     public void patientMenu() {
@@ -752,5 +782,9 @@ public class PoliSystem {
             Prescription prescription) {
 
         pharmacyQueue.offer(prescription);
+    }
+
+    public void UserPatient(){
+        
     }
 }
