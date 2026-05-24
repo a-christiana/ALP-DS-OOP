@@ -1,11 +1,6 @@
 package logic;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.PriorityQueue;
-import java.util.Queue;
-import java.util.Scanner;
+import java.util.*;
 import model.*;
 
 public class PoliSystem {
@@ -20,7 +15,7 @@ public class PoliSystem {
     private ArrayList<Appointment> appointments;
     private ArrayList<MedicalRecord> medicalRecords;
 
-    private PriorityQueue<Patient> poliQueue;
+    private PriorityQueue<Appointment> poliQueue;
     private Queue<Prescription> pharmacyQueue;
 
     public PoliSystem() {
@@ -34,8 +29,8 @@ public class PoliSystem {
 
         poliQueue = new PriorityQueue<>(
                 (a1, a2) -> Integer.compare(
-                        a2.getUrgencyLlevel(),
-                        a1.getUrgencyLlevel()));
+                        a2.getPatient().getUrgencyLlevel(),
+                        a1.getPatient().getUrgencyLlevel()));
 
         pharmacyQueue = new LinkedList<>();
     }
@@ -83,7 +78,7 @@ public class PoliSystem {
 
                 } else if (user.getRole() == Role.PATIENT) {
 
-                    UserPatient((Patient) user);
+                    patientMenu((Patient) user);
 
                 }
                 break;
@@ -181,7 +176,7 @@ public class PoliSystem {
                         case 3:
                             deleteMedicineMenu();
                             break;
-                        
+
                         default:
                             System.out.println("Please input from 1-4");
                             UserAdmin();
@@ -204,17 +199,17 @@ public class PoliSystem {
         }
     }
 
-    public void showAppointment(){
+    public void showAppointment() {
         System.out.println("=== APPOINTMENT LIST ===");
 
-        if (appointments.isEmpty()){
+        if (appointments.isEmpty()) {
             System.out.println("Belum ada Appointment.");
             return;
         }
 
         int no = 1;
 
-        for (Appointment appointment : appointments){
+        for (Appointment appointment : appointments) {
             System.out.println("Appointment " + no);
 
             System.out.println("Patient: " + appointment.getPatient().getFullName());
@@ -763,7 +758,7 @@ public class PoliSystem {
 
         appointments.add(appointment);
 
-        poliQueue.offer(appointment.getPatient());
+        poliQueue.offer(appointment);
     }
 
     public void addMedicalRecord(
@@ -781,13 +776,19 @@ public class PoliSystem {
         pharmacyQueue.offer(prescription);
     }
 
-    public void UserPatient(Patient patient){
-        int inputP;
+    public void patientMenu(Patient patient) {
 
-        do{
+        int input;
+
+        do {
+
             System.out.println();
             System.out.println("=== PATIENT MENU ===");
-            System.out.println("Hello, " + patient.getFullName());
+
+            System.out.println(
+                    "Hello, "
+                            + patient.getFullName());
+
             System.out.println("1. View Doctor List");
             System.out.println("2. Make Appointment");
             System.out.println("3. Cancel Appointment");
@@ -797,17 +798,42 @@ public class PoliSystem {
             System.out.println("7. Buy Medicine");
             System.out.println("8. Profile");
             System.out.println("9. Logout");
+
             System.out.print("Input: ");
 
-            inputP = scan.nextInt();
+            input = scan.nextInt();
+            scan.nextLine();
 
-            switch (inputP){
+            System.out.println();
+
+            switch (input) {
+
                 case 1:
-                    showDoctorForPatient();
+                    showDoctor();
                     break;
-                
-                case 2: 
+
+                case 2:
                     makeAppointment(patient);
+                    break;
+
+                case 3:
+                    cancelAppointmentMenu(patient);
+                    break;
+
+                case 4:
+                    viewAppointmentHistory(patient);
+                    break;
+
+                case 5:
+                    showHospitalQueue();
+                    break;
+
+                case 6:
+                    System.out.println("Pharmacy queue");
+                    break;
+
+                case 7:
+                    System.out.println("buy medicine");
                     break;
 
                 case 8:
@@ -815,37 +841,22 @@ public class PoliSystem {
                     break;
 
                 case 9:
+                    System.out.println("Logout success.");
                     start();
                     break;
 
                 default:
-                    System.out.println("Please input 1-3");
+                    System.out.println("Menu not available.");
+                    break;
             }
-        } while (inputP != 3);
+
+        } while (input != 9);
     }
 
-    public void showDoctorForPatient() {
-    System.out.println();
-    System.out.println("=== DOCTOR LIST ===");
-
-    if (doctors.isEmpty()) {
-        System.out.println("Belum ada dokter.");
-        return;
-    }
-
-    ArrayList<Doctor> doctorList = new ArrayList<>(doctors.values());
-    doctorList.sort((d1, d2) -> d1.getIdDoctor().compareTo(d2.getIdDoctor()));
-
-    for (Doctor doctor : doctorList) {
-        doctor.showDetail();
-        System.out.println("--------------------");
-    }
-}
-
-    public void makeAppointment(Patient patient){
+    public void makeAppointment(Patient patient) {
         System.out.println("=== MAKE APPOINTMENT ===");
 
-        if(doctors.isEmpty()){
+        if (doctors.isEmpty()) {
             System.out.println("Mohon maaf. Belum ada dokter.");
             return;
         }
@@ -854,20 +865,99 @@ public class PoliSystem {
 
         for (int i = 0; i < doctorList.size(); i++) {
             Doctor doctor = doctorList.get(i);
-
-            System.out.println((i+1) + ". " + doctor.getFullName() + " - " + doctor.getSpecialization());
+            System.out.println((i + 1) + ". " + doctor.getFullName() + " - " + doctor.getSpecialization());
         }
 
         System.out.print("Choose Doctor: ");
         int chooseD = scan.nextInt();
 
-        if (chooseD < 1 || chooseD > doctorList.size()){
+        if (chooseD < 1 || chooseD > doctorList.size()) {
             System.out.println("Input error. Please Try Again.");
             return;
         }
 
-        Doctor selectedD = doctorList.get(chooseD - 1)
+        Doctor selectedD = doctorList.get(chooseD - 1);
+
+        System.out.print("Complain: ");
+        String complain = scan.nextLine();
+
+        Appointment appointment = patient.creatAppointment(selectedD, complain);
+        addAppointment(appointment);
+        System.out.println();
+        System.out.println("Appointment added successfully.");
+
+        appointment.showDetail();
+    }
+
+    public void cancelAppointmentMenu(Patient patient) {
+
+        System.out.println("=== CANCEL APPOINTMENT ===");
+
+        if (patient.getAppointmentHistory().isEmpty()) {
+            System.out.println("No appointment found.");
+            return;
+        }
+
+        int no = 1;
+
+        for (Appointment appointment : patient.getAppointmentHistory()) {
+            System.out.println(no + ". " + appointment);
+            no++;
+        }
+
+        System.out.print("Choose: ");
+        int choice = scan.nextInt();
+        scan.nextLine();
+
+        if (choice < 1 || choice > patient.getAppointmentHistory().size()) {
+            System.out.println("Invalid choice.");
+            return;
+        }
+
+        Appointment appointment = patient.getAppointmentHistory().get(choice - 1);
+        appointment.cancelAppointment();
+        System.out.println("Appointment canceled");
+    }
+
+    public void viewAppointmentHistory(Patient patient) {
+
+        System.out.println("=== BOOKING HISTORY ===");
+
+        if (patient.getAppointmentHistory().isEmpty()) {
+            System.out.println("No booking history.");
+            return;
+        }
+
+        int no = 1;
+
+        for (Appointment appointment : patient.getAppointmentHistory()) {
+
+            System.out.println("Appointment " + no);
+            appointment.showDetail();
+            System.out.println("--------------------");
+            no++;
+        }
+    }
+
+    public void showHospitalQueue() {
+
+        System.out.println("=== HOSPITAL QUEUE ===");
+
+        if (poliQueue.isEmpty()) {
+            System.out.println("No queue available.");
+            return;
+        }
+
+        PriorityQueue<Appointment> tempQueue = new PriorityQueue<>(poliQueue);
+
+        int no = 1;
+
+        while (!tempQueue.isEmpty()) {
+
+            Appointment appointment = tempQueue.poll();
+            System.out.println(no + ". " + appointment);
+
+            no++;
+        }
     }
 }
-
-//tes 123
