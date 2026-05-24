@@ -733,25 +733,53 @@ public class PoliSystem {
 
 
     public void showDoctorQueue(Doctor activeDoctor){
-        System.out.println();
-        System.out.println("=== MY PATIENT QUEUE ===");
-        ArrayList<Appointment> doctorQueue = new ArrayList<>();
-        for (Appointment appointment : poliQueue) {
-            if (appointment.getDoctor().getIdDoctor().equals(activeDoctor.getIdDoctor())) {
-                doctorQueue.add(appointment);
+        int input = 0;
+        do {
+            System.out.println();
+            System.out.println("=== MY PATIENT QUEUE ===");
+            ArrayList<Appointment> doctorQueue = new ArrayList<>();
+            for (Appointment appointment : poliQueue) {
+                if (appointment.getDoctor().getIdDoctor().equals(activeDoctor.getIdDoctor()) && appointment.getAppointmentStatus().equals(AppointmentStatus.PENDING)) {
+                    doctorQueue.add(appointment);
+                }
             }
-        }
-        if (doctorQueue.isEmpty()) {
-            System.out.println("No queue available.");
-            return;
-        }
+            if (doctorQueue.isEmpty()) {
+                System.out.println("No queue available.");
+                return;
+            }
+    
+            doctorQueue.sort((a1, a2) -> Integer.compare(a1.getQueueNumber(), a2.getQueueNumber()));
+            int no = 1;
+            for (Appointment appointment : doctorQueue) {
+                System.out.println(no + ". " + appointment);
+                no++;
+            }
 
-        doctorQueue.sort((a1, a2) -> Integer.compare(a1.getQueueNumber(), a2.getQueueNumber()));
-        int no = 1;
-        for (Appointment appointment : doctorQueue) {
-            System.out.println(no + ". " + appointment);
-            no++;
-        }
+            System.out.println();
+            System.out.println("1. View Medical Record");
+            System.out.println("2. Back");
+            System.out.print("Input: ");
+            input = scan.nextInt();
+            switch (input) {
+                case 1:
+                    System.out.print("Select Patient ID: ");
+                    int select = scan.nextInt();
+                    if (select < 1 || select > doctorQueue.size()) {
+                        System.out.println("Invalid choice.");
+                        return;
+                    }
+                    Patient selectedPatient = doctorQueue.get(select - 1).getPatient();
+                    viewMedicalRecordsByPatient(selectedPatient);
+                    break;
+                case 2:
+                    UserDoctor(activeDoctor);
+                default:
+                    System.out.println("Please input from 1-3");
+                    showDoctorQueue(activeDoctor);
+            }
+
+        } while(input!=2);
+
     }
 
 
@@ -1182,6 +1210,12 @@ public class PoliSystem {
             no++;
         }
     }
+
+
+
+
+
+
 
 
 
