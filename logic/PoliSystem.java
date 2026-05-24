@@ -672,6 +672,7 @@ public class PoliSystem {
 
 
     public void showAppointment() {
+        System.out.println();
         System.out.println("=== APPOINTMENT LIST ===");
         if (appointments.isEmpty()) {
             System.out.println("Belum ada Appointment.");
@@ -751,7 +752,12 @@ public class PoliSystem {
             doctorQueue.sort((a1, a2) -> Integer.compare(a1.getQueueNumber(), a2.getQueueNumber()));
             int no = 1;
             for (Appointment appointment : doctorQueue) {
-                System.out.println(no + ". " + appointment);
+                System.out.println("Appointment " + no);
+                System.out.println("Patient: " + appointment.getPatient().getFullName());
+                System.out.println("Doctor: " + appointment.getDoctor().getFullName());
+                System.out.println("Date: " + appointment.appointmentDate());
+                System.out.println("Status: " + appointment.getAppointmentStatus());
+                System.out.println("----------------------------------");
                 no++;
             }
 
@@ -762,7 +768,7 @@ public class PoliSystem {
             input = scan.nextInt();
             switch (input) {
                 case 1:
-                    System.out.print("Select Patient ID: ");
+                    System.out.print("Select Appointment No: ");
                     int select = scan.nextInt();
                     if (select < 1 || select > doctorQueue.size()) {
                         System.out.println("Invalid choice.");
@@ -777,9 +783,7 @@ public class PoliSystem {
                     System.out.println("Please input from 1-3");
                     showDoctorQueue(activeDoctor);
             }
-
         } while(input!=2);
-
     }
 
 
