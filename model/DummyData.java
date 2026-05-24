@@ -1,7 +1,5 @@
 package model;
 
-import java.util.ArrayList;
-
 import logic.PoliSystem;
 
 public class DummyData {
@@ -80,11 +78,11 @@ public class DummyData {
         x.addMedicine(m9);
         x.addMedicine(m10);
 
-        Prescription pr1 = new Prescription("P001", p1, d10);
-        Prescription pr2 = new Prescription("P002", p2, d8);
-        Prescription pr3 = new Prescription("P003", p3, d5);
-        Prescription pr4 = new Prescription("P004", p4, d4);
-        Prescription pr5 = new Prescription("P005", p5, d1);
+        Prescription pr1 = new Prescription("PR001", p1, d10);
+        Prescription pr2 = new Prescription("PR001", p2, d8);
+        Prescription pr3 = new Prescription("PR001", p3, d5);
+        Prescription pr4 = new Prescription("PR001", p4, d4);
+        Prescription pr5 = new Prescription("PR001", p5, d1);
 
         pr1.addMedicine(m1, 2);
         pr1.addMedicine(m2, 1);
@@ -97,11 +95,17 @@ public class DummyData {
         pr5.addMedicine(m9, 1);
         pr5.addMedicine(m10, 1);
         
+        p1.addPrescription(pr1);
+        p2.addPrescription(pr2);
+        p3.addPrescription(pr3);
+        p4.addPrescription(pr4);
+        p5.addPrescription(pr5);
+        
         MedicalRecord mr1 = new MedicalRecord("MR001", p1, d10, "Pusing, demam, dan nyeri otot", "Influenza",  "Pemberian obat penurun demam dan istirahat cukup", pr1);
-        MedicalRecord mr2 = new MedicalRecord("MR002", p2, d8, "Gatal dan bentol merah pada tangan dan leher", "Gatal dan bentol merah pada tangan dan leher",  "Pemberian antihistamin dan salep anti inflamasi", pr2);
-        MedicalRecord mr3 = new MedicalRecord("MR003", p3, d5, "Nyeri gigi bagian belakang dan gusi bengkak",  "Karies gigi dan radang gusi",    "Pembersihan karang gigi dan pemberian antibiotik", pr3);
-        MedicalRecord mr4 = new MedicalRecord("MR004", p4, d4, "Demam tinggi, batuk, dan nafsu makan menurun",   "Infeksi Saluran Pernapasan Atas pada anak", "Pemberian sirup penurun demam dan vitamin anak", pr4);
-        MedicalRecord mr5 = new MedicalRecord("MR005", p5, d1, "Nyeri dada ringan dan sesak napas saat aktivitas berat",  "Hipertensi dan angina ringan",  "Pemberian obat penurun tekanan darah dan anjuran mengurangi aktivitas berat", pr5);
+        MedicalRecord mr2 = new MedicalRecord("MR001", p2, d8, "Gatal dan bentol merah pada tangan dan leher", "Gatal dan bentol merah pada tangan dan leher",  "Pemberian antihistamin dan salep anti inflamasi", pr2);
+        MedicalRecord mr3 = new MedicalRecord("MR001", p3, d5, "Nyeri gigi bagian belakang dan gusi bengkak",  "Karies gigi dan radang gusi",    "Pembersihan karang gigi dan pemberian antibiotik", pr3);
+        MedicalRecord mr4 = new MedicalRecord("MR001", p4, d4, "Demam tinggi, batuk, dan nafsu makan menurun",   "Infeksi Saluran Pernapasan Atas pada anak", "Pemberian sirup penurun demam dan vitamin anak", pr4);
+        MedicalRecord mr5 = new MedicalRecord("MR001", p5, d1, "Nyeri dada ringan dan sesak napas saat aktivitas berat",  "Hipertensi dan angina ringan",  "Pemberian obat penurun tekanan darah dan anjuran mengurangi aktivitas berat", pr5);
         
         x.addMedicalRecord(mr1, p1);
         x.addMedicalRecord(mr2, p2);

@@ -14,6 +14,7 @@ public class Patient extends User{
     private LocalDateTime registDateTime;
     private ArrayList<Appointment> appointmentHistory;
     private ArrayList<MedicalRecord> medicalRecords;
+    private ArrayList<Prescription> prescriptions;
 
     public Patient (String idUser, String username, String password, String idPatient, String fullname, String nik, String telepon, int urgencyLevel) {
         super(idUser, username, password, Role.PATIENT);
@@ -25,6 +26,7 @@ public class Patient extends User{
         this.registDateTime = LocalDateTime.now();
         appointmentHistory = new ArrayList<>();
         medicalRecords = new ArrayList<>();
+        prescriptions = new ArrayList<>();
     }
 
     public String getIdPatient() {
@@ -57,6 +59,14 @@ public class Patient extends User{
 
     public ArrayList<MedicalRecord> getMedicalRecords() {
         return medicalRecords;
+    }
+
+    public ArrayList<Prescription> getPrescriptions() {
+        return prescriptions;
+    }
+
+    public void addPrescription(Prescription prescription) {
+        prescriptions.add(prescription);
     }
 
     public double getPriorityScore() {

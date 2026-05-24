@@ -37,6 +37,7 @@ public class MedicalRecord {
         System.out.println("Treatment: " + treatment);
 
         if (prescription != null) {
+            System.out.println();
             prescription.showDetail();
         }
 
