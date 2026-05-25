@@ -61,19 +61,6 @@ public class Doctor extends User{
         return "Diagnosis Pasien: " + patient.getUname();
     }
 
-    // public String makeTreatment(Patient patient) {
-
-    // }
-
-    // public Prescription makePrescription() {
-
-    // }
-
-    // public void viewMedicalRecords(Patient patient) {
-    //     for (MedicalRecord record : patient.getMedicalRecords()) {
-    //         record.showDetail();
-    //     }
-    // }
 
     @Override
     public void showDetail() {

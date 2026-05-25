@@ -59,19 +59,19 @@ public class Appointment {
     public void showDetail() {
         System.out.println("=== APPOINTMENT DETAIL ===");
         System.out.println("Appointmet ID: " + idAppointment);
-        System.out.println("Patient: " + patient.getUname());
-        System.out.println("Doctor: " + doctor.getUname());
+        System.out.println("Patient: " + patient.getFullName());
+        System.out.println("Doctor: " + doctor.getFullName());
         System.out.println("Urgency: " + patient.getUrgencyLlevel());
         System.out.println("Date: " + appointmentDate);
         System.out.println("Status: " + status);
     }
 
-     @Override
+    @Override
     public String toString() {
         return "Queue " + queueNumber +
-                " | Patient: " + patient.getUname() +
+                " | Patient: " + patient.getFullName() +
                 " | Urgency: " + patient.getUrgencyLlevel() +
-                " | Doctor: " + doctor.getUname() +
+                " | Doctor: " + doctor.getFullName() +
                 " | Status: " + status;
     }
 }
