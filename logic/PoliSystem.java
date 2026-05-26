@@ -15,8 +15,9 @@ public class PoliSystem {
     private ArrayList<Appointment> appointments;
     private ArrayList<MedicalRecord> medicalRecords;
 
-    private PriorityQueue<Appointment> poliQueue;
+    private Queue<Appointment> poliQueue;
     private Queue<Prescription> pharmacyQueue;
+    private PriorityQueue<EmergencyCase> emergencyQueue;
 
 
 
@@ -30,12 +31,17 @@ public class PoliSystem {
         appointments = new ArrayList<>();
         medicalRecords = new ArrayList<>();
 
-        poliQueue = new PriorityQueue<>(
-                (a1, a2) -> Integer.compare(
-                        a2.getPatient().getUrgencyLlevel(),
-                        a1.getPatient().getUrgencyLlevel()));
-
+        poliQueue = new LinkedList<>();
         pharmacyQueue = new LinkedList<>();
+
+        emergencyQueue = new PriorityQueue<>((e1, e2) -> { int compareTriage = Integer.compare(e1.getTriageLevel().getPriority(), e2.getTriageLevel().getPriority());
+        if (compareTriage != 0) {
+            return compareTriage;
+        }
+
+        return e1.getArrivalTime().compareTo(e2.getArrivalTime());
+    }
+);
     }
 
 
@@ -105,8 +111,6 @@ public class PoliSystem {
                 System.out.print("Phone Number: ");
                 String phoneNumber = scan.next() + scan.nextLine();
                 
-                System.out.print("Urgency Level 1-5: ");
-                int urgencyLevel = scan.nextInt();
                 
                 Patient newPatient = new Patient(
                     idUser,
@@ -115,8 +119,7 @@ public class PoliSystem {
                     idPatient,
                     fullName,
                     nik,
-                    phoneNumber,
-                    urgencyLevel);
+                    phoneNumber);
                     addPatient(newPatient);
                     System.out.println("Register berhasil!");
                     System.out.println("User ID    : " + idUser);
@@ -486,8 +489,7 @@ public class PoliSystem {
         System.out.print("Phone Number: ");
         String phoneNumber = scan.next() + scan.nextLine();
 
-        System.out.print("Urgency Level 1-5: ");
-        int urgencyLevel = scan.nextInt();
+
         
         Patient newPatient = new Patient(
             idUser,
@@ -496,8 +498,7 @@ public class PoliSystem {
                 idPatient,
                 fullName,
                 nik,
-                phoneNumber,
-                urgencyLevel);
+                phoneNumber);
         addPatient(newPatient);
         System.out.println();
         System.out.println("Register berhasil!");

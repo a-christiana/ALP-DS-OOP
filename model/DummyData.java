@@ -34,11 +34,11 @@ public class DummyData {
         x.addDoctor(d9);
         x.addDoctor(d10);
 
-        Patient p1 = new Patient("U00011", "angie01", "123", "P00001", "Angie Michelle Grafiella", "357812340001", "0821111111", 0);
-        Patient p2 = new Patient("U00012", "angel01", "123", "P00002", "Angelina Christiana", "357812340002", "0821111112", 0);
-        Patient p3 = new Patient("U00013", "callista01", "123", "P00003", "Callista Nathania Andrea Nugroho", "357812340003", "0821111113", 0);  
-        Patient p4 = new Patient("U00014", "kevin01", "123", "P00004", "Kevin Sebastian Wijaya", "357812340004", "0821111114", 0);   
-        Patient p5 = new Patient("U00015", "jessica01", "123", "P00005", "Jessica Amanda Putri", "357812340005", "0821111115", 0);   
+        Patient p1 = new Patient("U00011", "angie01", "123", "P00001", "Angie Michelle Grafiella", "357812340001", "0821111111");
+        Patient p2 = new Patient("U00012", "angel01", "123", "P00002", "Angelina Christiana", "357812340002", "0821111112");
+        Patient p3 = new Patient("U00013", "callista01", "123", "P00003", "Callista Nathania Andrea Nugroho", "357812340003", "0821111113");  
+        Patient p4 = new Patient("U00014", "kevin01", "123", "P00004", "Kevin Sebastian Wijaya", "357812340004", "0821111114");   
+        Patient p5 = new Patient("U00015", "jessica01", "123", "P00005", "Jessica Amanda Putri", "357812340005", "0821111115");   
         
         x.addPatient(p1);
         x.addPatient(p2);

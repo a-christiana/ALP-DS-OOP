@@ -9,6 +9,7 @@ public class Doctor extends User{
     private String specialization;
     private boolean available;
     private PriorityQueue<Appointment> appointments;
+    private ArrayList<DoctorSchedule> doctorSchedules;
 
     public Doctor (String idUser, String username, String password, String doctorId, String fullName, String phoneNumber, String specialization) {
         super(idUser, username, password, Role.DOCTOR);
@@ -19,7 +20,8 @@ public class Doctor extends User{
         this.specialization = specialization;
         this.available = true;
 
-        appointments = new PriorityQueue<>((a1, a2) -> Integer.compare(a2.getPatient().getUrgencyLlevel(), a1.getPatient().getUrgencyLlevel()));
+        //doctorSchedules = new ArrayList<>();
+        //appointments = new PriorityQueue<>((a1, a2) -> Integer.compare(a2.getPatient().getUrgencyLlevel(), a1.getPatient().getUrgencyLlevel()));
     }
 
     public String getIdDoctor() {

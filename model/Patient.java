@@ -10,19 +10,17 @@ public class Patient extends User{
     private String fullname;
     private String nik;
     private String telepon;
-    private  int urgencyLevel;
     private LocalDateTime registDateTime;
     private ArrayList<Appointment> appointmentHistory;
     private ArrayList<MedicalRecord> medicalRecords;
     private ArrayList<Prescription> prescriptions;
 
-    public Patient (String idUser, String username, String password, String idPatient, String fullname, String nik, String telepon, int urgencyLevel) {
+    public Patient (String idUser, String username, String password, String idPatient, String fullname, String nik, String telepon) {
         super(idUser, username, password, Role.PATIENT);
         this.idPatient = idPatient;
         this.fullname = fullname;
         this.nik = nik;
         this.telepon = telepon;
-        this.urgencyLevel = urgencyLevel;
         this.registDateTime = LocalDateTime.now();
         appointmentHistory = new ArrayList<>();
         medicalRecords = new ArrayList<>();
@@ -45,9 +43,6 @@ public class Patient extends User{
         return telepon;
     }
 
-    public int getUrgencyLlevel() {
-        return urgencyLevel;
-    }
 
     public LocalDateTime getRegistDateTime() {
         return registDateTime;
@@ -69,9 +64,6 @@ public class Patient extends User{
         prescriptions.add(prescription);
     }
 
-    public double getPriorityScore() {
-        return  urgencyLevel;
-    }
 
     public Appointment creatAppointment(Doctor doctor, String complaint) {
         Appointment appointment = new Appointment("AP" + System.currentTimeMillis(), doctor, this, LocalDate.now());
@@ -124,7 +116,6 @@ public class Patient extends User{
                 "\nName: " + fullname +
                 "\nNIK: " + nik +
                 "\nTelepon: " + telepon +
-                "\nUrgency Level: " + urgencyLevel +
                 "\nRegistration Time: " + registDateTime);
         System.out.println();
     }
