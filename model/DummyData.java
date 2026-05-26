@@ -1,5 +1,8 @@
 package model;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 import logic.PoliSystem;
 
 public class DummyData {
@@ -113,6 +116,33 @@ public class DummyData {
         x.addMedicalRecord(mr4, p4);
         x.addMedicalRecord(mr5, p5);
         
-        
+        d1.addSchedule(new DoctorSchedule(LocalDate.now().plusDays(1), LocalTime.of(8, 0), LocalTime.of(12, 0)));
+        d1.addSchedule(new DoctorSchedule(LocalDate.now().plusDays(2), LocalTime.of(13, 0), LocalTime.of(16, 0)));
+        d2.addSchedule(new DoctorSchedule(LocalDate.now().plusDays(1), LocalTime.of(9, 0), LocalTime.of(13, 0)));
+        d3.addSchedule(new DoctorSchedule(LocalDate.now().plusDays(1), LocalTime.of(10, 0), LocalTime.of(14, 0)));
+        d4.addSchedule(new DoctorSchedule(LocalDate.now().plusDays(2), LocalTime.of(8, 0), LocalTime.of(11, 0)));
+        d5.addSchedule(new DoctorSchedule(LocalDate.now().plusDays(1), LocalTime.of(7, 0), LocalTime.of(15, 0)));
+
+        Appointment a1 = new Appointment("A001", d1, p1, LocalDate.now().plusDays(1), LocalTime.of(8, 0), "Chest Pain");
+        Appointment a2 = new Appointment("A002", d2, p2, LocalDate.now().plusDays(1), LocalTime.of(9, 0), "High Fever");
+        Appointment a3 = new Appointment("A003", d3, p3, LocalDate.now().plusDays(1), LocalTime.of(10, 0), "Tooth Pain");
+        Appointment a4 = new Appointment("A004", d4, p4, LocalDate.now().plusDays(2), LocalTime.of(8, 0), "Skin Rash");
+        Appointment a5 = new Appointment("A005", d5, p5, LocalDate.now().plusDays(1), LocalTime.of(7, 0), "Flu");
+
+        x.addAppointment(a1);
+        x.addAppointment(a2);
+        x.addAppointment(a3);
+        x.addAppointment(a4);
+        x.addAppointment(a5);
+
+        EmergencyCase e1 = new EmergencyCase("E001", p1, "Sesak Napas");
+        EmergencyCase e2 = new EmergencyCase("E002", p2, "Patah Tulang");
+        EmergencyCase e3 = new EmergencyCase("E003", p3, "Serangan Jantung");
+        EmergencyCase e4 = new EmergencyCase("E004", p4, "Demam Tinggi");
+
+        x.addEmergencyCase(e1);
+        x.addEmergencyCase(e2);
+        x.addEmergencyCase(e3);
+        x.addEmergencyCase(e4);
     }
 }

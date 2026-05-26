@@ -220,7 +220,7 @@ public class PoliSystem {
                     deleteDoctorMenu();
                     break;
                 case 4:
-                    //manageDoctorScheduleMenu();
+                    manageDoctorScheduleMenu();
                     break;
                 case 5:
                     UserAdmin();
@@ -316,6 +316,141 @@ public class PoliSystem {
         doctorMenu();
     }
 
+
+
+
+    public void manageDoctorScheduleMenu() {
+    System.out.println();
+    System.out.println("=== MANAGE DOCTOR SCHEDULE ===");
+
+    if (doctors.isEmpty()) {
+        System.out.println("Belum ada dokter.");
+        return;
+    }
+
+    ArrayList<Doctor> doctorList = new ArrayList<>(doctors.values());
+
+    for (int i = 0; i < doctorList.size(); i++) {
+        Doctor doctor = doctorList.get(i);
+        System.out.println((i + 1) + ". " + doctor.getFullName() + " - " + doctor.getSpecialization());
+    }
+
+    System.out.print("Choose Doctor: ");
+    int chooseDoctor = scan.nextInt();
+    scan.nextLine();
+
+    if (chooseDoctor < 1 || chooseDoctor > doctorList.size()) {
+        System.out.println("Invalid choice.");
+        return;
+    }
+
+    Doctor selectedDoctor = doctorList.get(chooseDoctor - 1);
+
+    int input = 0;
+    do {
+        System.out.println();
+        System.out.println("=== SCHEDULE MENU ===");
+        System.out.println("Doctor: " + selectedDoctor.getFullName());
+        System.out.println("1. View Schedule");
+        System.out.println("2. Add Schedule");
+        System.out.println("3. Delete Schedule");
+        System.out.println("4. Back");
+        System.out.print("Input: ");
+        input = scan.nextInt();
+        scan.nextLine();
+
+        switch (input) {
+            case 1:
+                selectedDoctor.viewSchedules();
+                break;
+
+            case 2:
+                addDoctorScheduleMenu(selectedDoctor);
+                break;
+
+            case 3:
+                deleteDoctorScheduleMenu(selectedDoctor);
+                break;
+
+            case 4:
+                doctorMenu();
+                break;
+
+            default:
+                System.out.println("Please input from 1-4");
+        }
+    } while (input != 4);
+}
+
+
+
+public void addDoctorScheduleMenu(Doctor doctor) {
+    System.out.println();
+    System.out.println("=== ADD DOCTOR SCHEDULE ===");
+
+    System.out.print("Date Year  : ");
+    int year = scan.nextInt();
+
+    System.out.print("Date Month : ");
+    int month = scan.nextInt();
+
+    System.out.print("Date Day   : ");
+    int day = scan.nextInt();
+
+    System.out.print("Start Hour : ");
+    int startHour = scan.nextInt();
+
+    System.out.print("Start Min  : ");
+    int startMin = scan.nextInt();
+
+    System.out.print("End Hour   : ");
+    int endHour = scan.nextInt();
+
+    System.out.print("End Min    : ");
+    int endMin = scan.nextInt();
+    scan.nextLine();
+
+    DoctorSchedule schedule = new DoctorSchedule(
+        LocalDate.of(year, month, day),
+        LocalTime.of(startHour, startMin),
+        LocalTime.of(endHour, endMin)
+    );
+
+    doctor.addSchedule(schedule);
+
+    System.out.println("Schedule added successfully.");
+}
+
+
+public void deleteDoctorScheduleMenu(Doctor doctor) {
+    System.out.println();
+    System.out.println("=== DELETE DOCTOR SCHEDULE ===");
+
+    if (doctor.getDoctorSchedules().isEmpty()) {
+        System.out.println("No schedule available.");
+        return;
+    }
+
+    ArrayList<DoctorSchedule> scheduleList = doctor.getDoctorSchedules();
+
+    for (int i = 0; i < scheduleList.size(); i++) {
+        System.out.print((i + 1) + ". ");
+        scheduleList.get(i).showDetail();
+    }
+
+    System.out.print("Choose schedule: ");
+    int choice = scan.nextInt();
+    scan.nextLine();
+
+    if (choice < 1 || choice > scheduleList.size()) {
+        System.out.println("Invalid choice.");
+        return;
+    }
+
+    scheduleList.remove(choice - 1);
+
+    System.out.println("Schedule deleted successfully.");
+}
 
 
 
@@ -701,51 +836,77 @@ public class PoliSystem {
             System.out.println("Date: " + appointment.appointmentDate());
             System.out.println("Status: " + appointment.getAppointmentStatus());
             System.out.println("----------------------------------");
+            System.out.println();
             no++;
         }
     }
 
 
 
-    public void emergencyMenu() {
-        System.out.println("=== IGD MENU ===");
+public void emergencyMenu() {
+    int input = 0;
+
+    do {
+        System.out.println();
+        System.out.println("=== IGD / EMERGENCY MENU ===");
         System.out.println("1. Add Emergency Case");
         System.out.println("2. View Emergency Queue");
-        System.out.println("3. Back");
-        System.out.println("Input: ");
-        int input = scan.nextInt();
-        System.out.println();
+        System.out.println("3. Handle Emergency Patient");
+        System.out.println("4. Back");
+        System.out.print("Input: ");
+        input = scan.nextInt();
+        scan.nextLine();
+
         switch (input) {
             case 1:
                 addEmergencyCaseMenu();
                 break;
+
             case 2:
                 showEmergencyQueue();
                 break;
-            default:
+
+            case 3:
+                handleEmergencyPatient();
                 break;
+
+            case 4:
+                UserAdmin();
+                break;
+
+            default:
+                System.out.println("Please input from 1-4");
         }
+    } while (input != 4);
+}
+
+
+public void addEmergencyCaseMenu() {
+    System.out.println();
+    System.out.println("=== ADD EMERGENCY CASE ===");
+    Patient patient = choosePatientFromList();
+
+    if (patient == null) {
+        return;
     }
 
+    System.out.print("Complaint: ");
+    String complaint = scan.nextLine();
 
+    String emergencyId = "E" + String.format("%03d", emergencyQueue.size() + 1);
 
-    public void addEmergencyCaseMenu() {
-        Patient patient = choosePatientFromList();
-        if (patient == null) {
-            return;
-        }
-        System.out.print("Complaint: ");
-        String complaint = scan.nextLine();
-        String emergencyId = "E" + String.format("%03d", emergencyQueue.size() + 1);
-        EmergencyCase emergencyCase = new EmergencyCase(
-            emergencyId,
-            patient,
-            complaint
-        );
-        emergencyQueue.offer(emergencyCase);
-        System.out.println("Emergency case added.");
-        emergencyCase.showDetail();
-    }
+    EmergencyCase emergencyCase = new EmergencyCase(
+        emergencyId,
+        patient,
+        complaint
+    );
+
+    emergencyQueue.offer(emergencyCase);
+
+    System.out.println();
+    System.out.println("Emergency case added successfully.");
+    emergencyCase.showDetail();
+}
 
 
 
@@ -766,6 +927,24 @@ public class PoliSystem {
     }
 
 
+
+    public void handleEmergencyPatient() {
+    System.out.println();
+    System.out.println("=== HANDLE EMERGENCY PATIENT ===");
+
+    if (emergencyQueue.isEmpty()) {
+        System.out.println("No emergency patient.");
+        return;
+    }
+
+    EmergencyCase emergencyCase = emergencyQueue.poll();
+
+    System.out.println("Next emergency patient:");
+    emergencyCase.showDetail();
+
+    System.out.println();
+    System.out.println("Patient is now being handled.");
+}
 
 
 
@@ -1215,7 +1394,6 @@ public class PoliSystem {
             System.out.println("Input error. Please Try Again.");
             return;
         }
-
         Doctor selectedD = doctorList.get(chooseD - 1);
         if (selectedD.getDoctorSchedules().isEmpty()) {
             System.out.println("Mohon maaf. Dokter belum memiliki jadwal.");
@@ -1473,6 +1651,7 @@ public class PoliSystem {
         appointment.getDoctor().addAppointment(appointment);
     }
 
+    
     public void addMedicalRecord(MedicalRecord record, Patient patient) {
         medicalRecords.add(record);
         patient.addMedicalRecord(record);
@@ -1481,4 +1660,10 @@ public class PoliSystem {
     public void addPharmacyQueue(Prescription prescription) {
         pharmacyQueue.offer(prescription);
     }
+
+    public void addEmergencyCase(EmergencyCase emergencyCase) {
+        emergencyQueue.offer(emergencyCase);
+    }
+    
 }
+
