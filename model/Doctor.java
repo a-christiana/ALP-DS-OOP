@@ -8,9 +8,9 @@ public class Doctor extends User{
     private String phoneNumber;
     private String specialization;
     private boolean available;
-    private PriorityQueue<Appointment> appointments;
+    private Queue<Appointment> appointments;
     private ArrayList<DoctorSchedule> doctorSchedules;
-
+    
     public Doctor (String idUser, String username, String password, String doctorId, String fullName, String phoneNumber, String specialization) {
         super(idUser, username, password, Role.DOCTOR);
 
@@ -19,37 +19,54 @@ public class Doctor extends User{
         this.phoneNumber = phoneNumber;
         this.specialization = specialization;
         this.available = true;
-
-        //doctorSchedules = new ArrayList<>();
-        //appointments = new PriorityQueue<>((a1, a2) -> Integer.compare(a2.getPatient().getUrgencyLlevel(), a1.getPatient().getUrgencyLlevel()));
+        this.appointments = new LinkedList<>();
+        this.doctorSchedules = new ArrayList<>();
     }
 
     public String getIdDoctor() {
         return idDoctor;
     }
-
+    
     public String getFullName() {
         return fullName;
     }
-
+    
     public String getPhoneNumber() {
         return phoneNumber;
     }
-
+    
     public String getSpecialization() {
         return specialization;
     }
-
+    
     public boolean isAvalaible() {
         return available;
     }
+    
+    public ArrayList<DoctorSchedule> getDoctorSchedules() {
+        return doctorSchedules;
+    }
+    
+    public void addSchedule(DoctorSchedule schedule) {
+        doctorSchedules.add(schedule);
+    }
+
+    public void viewSchedules() {
+        if (doctorSchedules.isEmpty()) {
+            System.out.println("No schedule available");
+            return;
+        }
+        for (DoctorSchedule schedule : doctorSchedules) {
+            schedule.showDetail();
+        }
+    }
+
 
     public void addAppointment(Appointment appointment) {
         appointments.add(appointment);
     }
 
     public void viewAppointment() {
-        
         if (appointments.isEmpty()) {
             System.out.println("No appointment available");
         }
@@ -68,4 +85,6 @@ public class Doctor extends User{
     public void showDetail() {
         System.out.println("Doctor ID : " + idDoctor + "\nName : " + fullName +"\nPhone : " + phoneNumber + "\nSpecialist : " + specialization); 
     }
+
+    
 }

@@ -1,5 +1,7 @@
 package logic;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 import model.*;
 
@@ -153,7 +155,8 @@ public class PoliSystem {
             System.out.println("2. Kelola Obat");
             System.out.println("3. Kelola Pasien");
             System.out.println("4. Lihat Jadwal Appointment");
-            System.out.println("5. Logout");
+            System.out.println("5. IGD");
+            System.out.println("6. Logout");
             System.out.print("Input: ");
             input = scan.nextInt();
 
@@ -175,7 +178,12 @@ public class PoliSystem {
                     break;
                     
                 case 5:
+                    //emergencyMenu();
+                    break;
+
+                case 6:
                     start();
+                    break;
                 default:
                     System.out.println("Please input from 1-5");
                     UserAdmin();
@@ -194,7 +202,8 @@ public class PoliSystem {
             System.out.println("1. View Doctor List");
             System.out.println("2. Add New Doctor");
             System.out.println("3. Delete Doctor");
-            System.out.println("4. Back");
+            System.out.println("4. Manage Doctor Schedule");
+            System.out.println("5. Back");
             System.out.print("Input: ");
             inp = scan.nextInt();
             scan.nextLine();
@@ -211,7 +220,11 @@ public class PoliSystem {
                     deleteDoctorMenu();
                     break;
                 case 4:
+                    //manageDoctorScheduleMenu();
+                    break;
+                case 5:
                     UserAdmin();
+                    break;
                 default:
                     System.out.println("Please input from 1-5");
                     doctorMenu();
@@ -694,6 +707,67 @@ public class PoliSystem {
 
 
 
+    public void emergencyMenu() {
+        System.out.println("=== IGD MENU ===");
+        System.out.println("1. Add Emergency Case");
+        System.out.println("2. View Emergency Queue");
+        System.out.println("3. Back");
+        System.out.println("Input: ");
+        int input = scan.nextInt();
+        System.out.println();
+        switch (input) {
+            case 1:
+                addEmergencyCaseMenu();
+                break;
+            case 2:
+                showEmergencyQueue();
+                break;
+            default:
+                break;
+        }
+    }
+
+
+
+    public void addEmergencyCaseMenu() {
+        Patient patient = choosePatientFromList();
+        if (patient == null) {
+            return;
+        }
+        System.out.print("Complaint: ");
+        String complaint = scan.nextLine();
+        String emergencyId = "E" + String.format("%03d", emergencyQueue.size() + 1);
+        EmergencyCase emergencyCase = new EmergencyCase(
+            emergencyId,
+            patient,
+            complaint
+        );
+        emergencyQueue.offer(emergencyCase);
+        System.out.println("Emergency case added.");
+        emergencyCase.showDetail();
+    }
+
+
+
+    public void showEmergencyQueue() {
+        System.out.println("=== IGD QUEUE ===");
+        if (emergencyQueue.isEmpty()) {
+            System.out.println("No emergency queue.");
+            return;
+        }
+        PriorityQueue<EmergencyCase> tempQueue = new PriorityQueue<>(emergencyQueue);
+        int no = 1;
+        while (!tempQueue.isEmpty()) {
+            System.out.println("Emergency Case " + no);
+            tempQueue.poll().showDetail();
+            System.out.println("--------------------");
+            no++;
+        }
+    }
+
+
+
+
 
 
 
@@ -1135,22 +1209,104 @@ public class PoliSystem {
         }
         System.out.print("Choose Doctor: ");
         int chooseD = scan.nextInt();
+        scan.nextLine();
 
         if (chooseD < 1 || chooseD > doctorList.size()) {
             System.out.println("Input error. Please Try Again.");
             return;
         }
-        Doctor selectedD = doctorList.get(chooseD - 1);
-        System.out.print("Complain: ");
-        String complain = scan.next() + scan.nextLine();
 
-        Appointment appointment = patient.creatAppointment(selectedD, complain);
+        Doctor selectedD = doctorList.get(chooseD - 1);
+        if (selectedD.getDoctorSchedules().isEmpty()) {
+            System.out.println("Mohon maaf. Dokter belum memiliki jadwal.");
+            return;
+        }
+
+        System.out.println();
+        System.out.println("=== DOCTOR SCHEDULE ===");
+
+        ArrayList<DoctorSchedule> scheduleList = selectedD.getDoctorSchedules();
+
+        for (int i = 0; i < scheduleList.size(); i++) {
+            System.out.print((i + 1) + ". ");
+            scheduleList.get(i).showDetail();
+        }
+
+        System.out.print("Choose Schedule: ");
+        int chooseSchedule = scan.nextInt();
+        scan.nextLine();
+
+        if (chooseSchedule < 1 || chooseSchedule > scheduleList.size()) {
+            System.out.println("Input error. Please Try Again.");
+            return;
+        }
+
+        DoctorSchedule selectedSchedule = scheduleList.get(chooseSchedule - 1);
+
+        if (!selectedSchedule.isAvailable()) {
+            System.out.println("Jadwal dokter tidak tersedia.");
+            return;
+        }
+
+        LocalTime appointmentTime = getNextAvailableTime(selectedD, selectedSchedule);
+
+        if (appointmentTime == null) {
+            System.out.println("Jadwal dokter penuh atau poli sudah tutup.");
+            return;
+        }
+
+        System.out.print("Complain: ");
+        String complain = scan.nextLine();
+
+        String idAppointment = "A" + String.format("%03d", appointments.size() + 1);
+
+        Appointment appointment = new Appointment(
+            idAppointment,
+            selectedD,
+            patient,
+            selectedSchedule.getDate(),
+            appointmentTime,
+            complain
+        );
+
         addAppointment(appointment);
+
         System.out.println();
         System.out.println("Appointment added successfully.");
+        System.out.println("Estimated Time: " + appointmentTime);
         System.out.println();
         appointment.showDetail();
     }
+
+
+
+    public LocalTime getNextAvailableTime(Doctor doctor, DoctorSchedule schedule) {
+        int durationPerPatient = 20;
+        LocalTime currentTime = schedule.getStartTime();
+        while (!currentTime.plusMinutes(durationPerPatient).isAfter(schedule.getEndTime())) {
+            if (isSlotAvailable(doctor, schedule.getDate(), currentTime)) {
+                return currentTime;
+            }
+            currentTime = currentTime.plusMinutes(durationPerPatient);
+        }
+        return null;
+    }
+
+
+
+    public boolean isSlotAvailable(Doctor doctor, LocalDate date, LocalTime time) {
+        for (Appointment appointment : appointments) {
+            boolean sameDoctor = appointment.getDoctor().getIdDoctor().equals(doctor.getIdDoctor());
+            boolean sameDate = appointment.appointmentDate().equals(date);
+            boolean sameTime = appointment.getAppointmentTime().equals(time);
+            boolean notCanceled = !appointment.getAppointmentStatus().equals(AppointmentStatus.CANCELED);
+            if (sameDoctor && sameDate && sameTime && notCanceled) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 
 
     
@@ -1201,16 +1357,14 @@ public class PoliSystem {
     
 
     public void showHospitalQueue() {
+        System.out.println();
         System.out.println("=== HOSPITAL QUEUE ===");
         if (poliQueue.isEmpty()) {
             System.out.println("No queue available.");
             return;
         }
-
-        PriorityQueue<Appointment> tempQueue = new PriorityQueue<>(poliQueue);
         int no = 1;
-        while (!tempQueue.isEmpty()) {
-            Appointment appointment = tempQueue.poll();
+        for (Appointment appointment : poliQueue) {
             System.out.println(no + ". " + appointment);
             no++;
         }
@@ -1311,13 +1465,14 @@ public class PoliSystem {
     public void addMedicine(Medicine medicine) {
         medicines.put(medicine.getIdMedicine(), medicine);
     }
-
     
     public void addAppointment(Appointment appointment) {
         appointments.add(appointment);
         poliQueue.offer(appointment);
+        appointment.getPatient().addAppointmentHistory(appointment);
+        appointment.getDoctor().addAppointment(appointment);
     }
-    
+
     public void addMedicalRecord(MedicalRecord record, Patient patient) {
         medicalRecords.add(record);
         patient.addMedicalRecord(record);

@@ -31,4 +31,9 @@ public class DoctorSchedule {
     public boolean isAvailable() {
         return available;
     }
+
+    public void showDetail() {
+        System.out.println("Date : " + date + " | Start : " + startTime + " | End : " + endTime
+    );
+}
 }

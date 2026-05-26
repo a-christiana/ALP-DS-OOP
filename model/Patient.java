@@ -2,6 +2,7 @@ package model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -51,6 +52,9 @@ public class Patient extends User{
     public ArrayList<Appointment> getAppointmentHistory() {
         return appointmentHistory;
     }
+    public void addAppointmentHistory(Appointment appointment) {
+        appointmentHistory.add(appointment);
+    }
 
     public ArrayList<MedicalRecord> getMedicalRecords() {
         return medicalRecords;
@@ -66,7 +70,7 @@ public class Patient extends User{
 
 
     public Appointment creatAppointment(Doctor doctor, String complaint) {
-        Appointment appointment = new Appointment("AP" + System.currentTimeMillis(), doctor, this, LocalDate.now());
+        Appointment appointment = new Appointment("AP" + System.currentTimeMillis(), doctor, this, LocalDate.now(), LocalTime.now(), complaint);
         appointmentHistory.add(appointment);
         doctor.addAppointment(appointment);
         return appointment;
