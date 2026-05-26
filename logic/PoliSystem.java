@@ -129,7 +129,7 @@ public class PoliSystem {
                 start();
 
             case 3:
-                break;
+                start();
             default:
                 System.out.println("Please input from 1-3");
                 start();
