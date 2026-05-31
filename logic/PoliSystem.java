@@ -178,7 +178,7 @@ public class PoliSystem {
                     break;
                     
                 case 5:
-                    //emergencyMenu();
+                    emergencyMenu();
                     break;
 
                 case 6:
@@ -320,67 +320,58 @@ public class PoliSystem {
 
 
     public void manageDoctorScheduleMenu() {
-    System.out.println();
-    System.out.println("=== MANAGE DOCTOR SCHEDULE ===");
-
-    if (doctors.isEmpty()) {
-        System.out.println("Belum ada dokter.");
-        return;
-    }
-
-    ArrayList<Doctor> doctorList = new ArrayList<>(doctors.values());
-
-    for (int i = 0; i < doctorList.size(); i++) {
-        Doctor doctor = doctorList.get(i);
-        System.out.println((i + 1) + ". " + doctor.getFullName() + " - " + doctor.getSpecialization());
-    }
-
-    System.out.print("Choose Doctor: ");
-    int chooseDoctor = scan.nextInt();
-    scan.nextLine();
-
-    if (chooseDoctor < 1 || chooseDoctor > doctorList.size()) {
-        System.out.println("Invalid choice.");
-        return;
-    }
-
-    Doctor selectedDoctor = doctorList.get(chooseDoctor - 1);
-
-    int input = 0;
-    do {
         System.out.println();
-        System.out.println("=== SCHEDULE MENU ===");
-        System.out.println("Doctor: " + selectedDoctor.getFullName());
-        System.out.println("1. View Schedule");
-        System.out.println("2. Add Schedule");
-        System.out.println("3. Delete Schedule");
-        System.out.println("4. Back");
-        System.out.print("Input: ");
-        input = scan.nextInt();
-        scan.nextLine();
-
-        switch (input) {
-            case 1:
-                selectedDoctor.viewSchedules();
-                break;
-
-            case 2:
-                addDoctorScheduleMenu(selectedDoctor);
-                break;
-
-            case 3:
-                deleteDoctorScheduleMenu(selectedDoctor);
-                break;
-
-            case 4:
-                doctorMenu();
-                break;
-
-            default:
-                System.out.println("Please input from 1-4");
+        System.out.println("=== MANAGE DOCTOR SCHEDULE ===");
+        if (doctors.isEmpty()) {
+            System.out.println("Belum ada dokter.");
+            return;
         }
-    } while (input != 4);
-}
+
+        ArrayList<Doctor> doctorList = new ArrayList<>(doctors.values());
+        for (int i = 0; i < doctorList.size(); i++) {
+            Doctor doctor = doctorList.get(i);
+            System.out.println((i + 1) + ". " + doctor.getFullName() + " - " + doctor.getSpecialization());
+        }
+
+        System.out.print("Choose Doctor: ");
+        int chooseDoctor = scan.nextInt();
+        scan.nextLine();
+        if (chooseDoctor < 1 || chooseDoctor > doctorList.size()) {
+            System.out.println("Invalid choice.");
+            return;
+        }
+        Doctor selectedDoctor = doctorList.get(chooseDoctor - 1);
+        int input = 0;
+        do {
+            System.out.println();
+            System.out.println("=== SCHEDULE MENU ===");
+            System.out.println("Doctor: " + selectedDoctor.getFullName());
+            System.out.println("1. View Schedule");
+            System.out.println("2. Add Schedule");
+            System.out.println("3. Delete Schedule");
+            System.out.println("4. Back");
+            System.out.print("Input: ");
+            input = scan.nextInt();
+            scan.nextLine();
+
+            switch (input) {
+                case 1:
+                    selectedDoctor.viewSchedules();
+                    break;
+                case 2:
+                    addDoctorScheduleMenu(selectedDoctor);
+                    break;
+                case 3:
+                    deleteDoctorScheduleMenu(selectedDoctor);
+                    break;
+                case 4:
+                    doctorMenu();
+                    break;
+                default:
+                    System.out.println("Please input from 1-4");
+            }
+        } while (input != 4);
+    }
 
 
 
@@ -843,74 +834,65 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
 
 
 
-public void emergencyMenu() {
-    int input = 0;
+    public void emergencyMenu() {
+        int input = 0;
+        do {
+            System.out.println();
+            System.out.println("=== IGD / EMERGENCY MENU ===");
+            System.out.println("1. Add Emergency Case");
+            System.out.println("2. View Emergency Queue");
+            System.out.println("3. Handle Emergency Patient");
+            System.out.println("4. Back");
+            System.out.print("Input: ");
+            input = scan.nextInt();
+            scan.nextLine();
 
-    do {
-        System.out.println();
-        System.out.println("=== IGD / EMERGENCY MENU ===");
-        System.out.println("1. Add Emergency Case");
-        System.out.println("2. View Emergency Queue");
-        System.out.println("3. Handle Emergency Patient");
-        System.out.println("4. Back");
-        System.out.print("Input: ");
-        input = scan.nextInt();
-        scan.nextLine();
-
-        switch (input) {
-            case 1:
-                addEmergencyCaseMenu();
-                break;
-
-            case 2:
-                showEmergencyQueue();
-                break;
-
-            case 3:
-                handleEmergencyPatient();
-                break;
-
-            case 4:
-                UserAdmin();
-                break;
-
-            default:
-                System.out.println("Please input from 1-4");
-        }
-    } while (input != 4);
-}
-
-
-public void addEmergencyCaseMenu() {
-    System.out.println();
-    System.out.println("=== ADD EMERGENCY CASE ===");
-    Patient patient = choosePatientFromList();
-
-    if (patient == null) {
-        return;
+            switch (input) {
+                case 1:
+                    addEmergencyCaseMenu();
+                    break;
+                case 2:
+                    showEmergencyQueue();
+                    break;
+                case 3:
+                    handleEmergencyPatient();
+                    break;
+                case 4:
+                    UserAdmin();
+                    break;
+                default:
+                    System.out.println("Please input from 1-4");
+            }
+        } while (input != 4);
     }
 
-    System.out.print("Complaint: ");
-    String complaint = scan.nextLine();
 
-    String emergencyId = "E" + String.format("%03d", emergencyQueue.size() + 1);
+    public void addEmergencyCaseMenu() {
+        System.out.println();
+        System.out.println("=== ADD EMERGENCY CASE ===");
+        Patient patient = choosePatientFromList();
+        if (patient == null) {
+            return;
+        }
+        System.out.print("Complaint: ");
+        String complaint = scan.next() + scan.nextLine();
 
-    EmergencyCase emergencyCase = new EmergencyCase(
-        emergencyId,
-        patient,
-        complaint
-    );
-
-    emergencyQueue.offer(emergencyCase);
-
-    System.out.println();
-    System.out.println("Emergency case added successfully.");
-    emergencyCase.showDetail();
-}
+        String emergencyId = "E" + String.format("%03d", emergencyQueue.size() + 1);
+        EmergencyCase emergencyCase = new EmergencyCase(
+            emergencyId,
+            patient,
+            complaint
+        );
+        emergencyQueue.offer(emergencyCase);
+        System.out.println();
+        System.out.println("Emergency case added successfully.");
+        emergencyCase.showDetail();
+    }
 
 
 
     public void showEmergencyQueue() {
+        System.out.println();
         System.out.println("=== IGD QUEUE ===");
         if (emergencyQueue.isEmpty()) {
             System.out.println("No emergency queue.");
@@ -929,22 +911,19 @@ public void addEmergencyCaseMenu() {
 
 
     public void handleEmergencyPatient() {
-    System.out.println();
-    System.out.println("=== HANDLE EMERGENCY PATIENT ===");
+        System.out.println();
+        System.out.println("=== HANDLE EMERGENCY PATIENT ===");
+        if (emergencyQueue.isEmpty()) {
+            System.out.println("No emergency patient.");
+            return;
+        }
 
-    if (emergencyQueue.isEmpty()) {
-        System.out.println("No emergency patient.");
-        return;
+        EmergencyCase emergencyCase = emergencyQueue.poll();
+        //System.out.println("Next emergency patient:");
+        emergencyCase.showDetail();
+        System.out.println();
+        System.out.println("Patient is now being handled.");
     }
-
-    EmergencyCase emergencyCase = emergencyQueue.poll();
-
-    System.out.println("Next emergency patient:");
-    emergencyCase.showDetail();
-
-    System.out.println();
-    System.out.println("Patient is now being handled.");
-}
 
 
 
@@ -1003,17 +982,28 @@ public void addEmergencyCaseMenu() {
                 return;
             }
     
-            doctorQueue.sort((a1, a2) -> Integer.compare(a1.getQueueNumber(), a2.getQueueNumber()));
-            int no = 1;
+            doctorQueue.sort(Comparator.comparing(Appointment::appointmentDate).thenComparing(Appointment::getAppointmentTime));
+            Appointment nextPatient = doctorQueue.get(0);
+            System.out.println("NOW CHECKING");
+            System.out.println("Patient   : " + nextPatient.getPatient().getFullName());
+            System.out.println("Time      : " + nextPatient.getAppointmentTime());
+            System.out.println("Date      : " + nextPatient.appointmentDate());
+            System.out.println("Complaint : " + nextPatient.getComplain());
+            System.out.println("--------------------------------");
+
+            LocalDate currentDate = null;
+            int in = 1;
             for (Appointment appointment : doctorQueue) {
-                System.out.println("Appointment " + no);
-                System.out.println("Patient: " + appointment.getPatient().getFullName());
-                System.out.println("Doctor: " + appointment.getDoctor().getFullName());
-                System.out.println("Date: " + appointment.appointmentDate());
-                System.out.println("Status: " + appointment.getAppointmentStatus());
-                System.out.println("----------------------------------");
-                no++;
+                if (!appointment.appointmentDate().equals(currentDate)) {
+                    currentDate = appointment.appointmentDate();
+                    in = 1;
+                    System.out.println();
+                    System.out.println("Date : " + currentDate);
+                }
+                System.out.println(in + ". " + appointment.getAppointmentTime() + " | " + appointment.getPatient().getFullName());
+                in++;
             }
+
 
             System.out.println();
             System.out.println("1. View Medical Record");
@@ -1314,11 +1304,12 @@ public void addEmergencyCaseMenu() {
             System.out.println("2. Make Appointment");
             System.out.println("3. Cancel Appointment");
             System.out.println("4. View Booking History");
-            System.out.println("5. View Hospital Queue");
-            System.out.println("6. View Pharmacy Queue");
-            System.out.println("7. Buy Medicine");
-            System.out.println("8. Profile");
-            System.out.println("9. Logout");
+            System.out.println("5. Show My Queue");
+            System.out.println("6. View Hospital Queue");
+            System.out.println("7. View Pharmacy Queue");
+            System.out.println("8. Buy Medicine");
+            System.out.println("9. Profile");
+            System.out.println("10. Logout");
             System.out.print("Input: ");
             input = scan.nextInt();
             scan.nextLine();
@@ -1342,24 +1333,28 @@ public void addEmergencyCaseMenu() {
                     break;
 
                 case 5:
-                    showHospitalQueue();
+                    showMyQueue(patient);
                     break;
 
                 case 6:
-                    System.out.println("Pharmacy queue");
+                    showHospitalQueue(patient);
                     break;
 
                 case 7:
-                    System.out.println("buy medicine");
+                    System.out.println("Pharmacy queue");
                     break;
 
                 case 8:
+                    System.out.println("buy medicine");
+                    break;
+
+                case 9:
                     System.out.println();
                     System.out.println("=== PROFILE ===");
                     patient.showDetail();
                     break;
 
-                case 9:
+                case 10:
                     System.out.println("Logout success.");
                     start();
                     break;
@@ -1389,7 +1384,6 @@ public void addEmergencyCaseMenu() {
         System.out.print("Choose Doctor: ");
         int chooseD = scan.nextInt();
         scan.nextLine();
-
         if (chooseD < 1 || chooseD > doctorList.size()) {
             System.out.println("Input error. Please Try Again.");
             return;
@@ -1402,42 +1396,42 @@ public void addEmergencyCaseMenu() {
 
         System.out.println();
         System.out.println("=== DOCTOR SCHEDULE ===");
-
         ArrayList<DoctorSchedule> scheduleList = selectedD.getDoctorSchedules();
-
         for (int i = 0; i < scheduleList.size(); i++) {
             System.out.print((i + 1) + ". ");
             scheduleList.get(i).showDetail();
         }
-
         System.out.print("Choose Schedule: ");
         int chooseSchedule = scan.nextInt();
         scan.nextLine();
-
         if (chooseSchedule < 1 || chooseSchedule > scheduleList.size()) {
             System.out.println("Input error. Please Try Again.");
             return;
         }
-
         DoctorSchedule selectedSchedule = scheduleList.get(chooseSchedule - 1);
-
         if (!selectedSchedule.isAvailable()) {
             System.out.println("Jadwal dokter tidak tersedia.");
             return;
         }
-
         LocalTime appointmentTime = getNextAvailableTime(selectedD, selectedSchedule);
-
         if (appointmentTime == null) {
-            System.out.println("Jadwal dokter penuh atau poli sudah tutup.");
-            return;
+            System.out.println("Jadwal yang dipilih sudah penuh.");
+            DoctorSchedule nextSchedule = getNextAvailableSchedule(selectedD, selectedSchedule);
+            if (nextSchedule == null) {
+                System.out.println(
+                    "Tidak ada jadwal lain yang tersedia."
+                );
+                return;
+            }
+            selectedSchedule = nextSchedule;
+            appointmentTime = getNextAvailableTime(selectedD, selectedSchedule);
+            System.out.println("Dialihkan ke jadwal berikutnya:");
+            selectedSchedule.showDetail();
         }
 
         System.out.print("Complain: ");
         String complain = scan.nextLine();
-
         String idAppointment = "A" + String.format("%03d", appointments.size() + 1);
-
         Appointment appointment = new Appointment(
             idAppointment,
             selectedD,
@@ -1446,9 +1440,7 @@ public void addEmergencyCaseMenu() {
             appointmentTime,
             complain
         );
-
         addAppointment(appointment);
-
         System.out.println();
         System.out.println("Appointment added successfully.");
         System.out.println("Estimated Time: " + appointmentTime);
@@ -1472,8 +1464,32 @@ public void addEmergencyCaseMenu() {
 
 
 
+    public DoctorSchedule getNextAvailableSchedule(Doctor doctor, DoctorSchedule currentSchedule) {
+        ArrayList<DoctorSchedule> schedules = new ArrayList<>(doctor.getDoctorSchedules());
+        schedules.sort(Comparator.comparing(DoctorSchedule::getDate));
+        boolean foundCurrent = false;
+
+        for (DoctorSchedule schedule : schedules) {
+            if (!foundCurrent) {
+                if (schedule.equals(currentSchedule)) {
+                    foundCurrent = true;
+                }
+                continue;
+            }
+            if (getNextAvailableTime(doctor, schedule) != null) {
+                return schedule;
+            }
+        }
+        return null;
+    }
+
+
+
     public boolean isSlotAvailable(Doctor doctor, LocalDate date, LocalTime time) {
         for (Appointment appointment : appointments) {
+            if (appointment.getAppointmentTime() == null) {
+                continue;
+            }
             boolean sameDoctor = appointment.getDoctor().getIdDoctor().equals(doctor.getIdDoctor());
             boolean sameDate = appointment.appointmentDate().equals(date);
             boolean sameTime = appointment.getAppointmentTime().equals(time);
@@ -1534,7 +1550,7 @@ public void addEmergencyCaseMenu() {
 
     
 
-    public void showHospitalQueue() {
+    public void showHospitalQueue(Patient patient) {
         System.out.println();
         System.out.println("=== HOSPITAL QUEUE ===");
         if (poliQueue.isEmpty()) {
@@ -1543,11 +1559,62 @@ public void addEmergencyCaseMenu() {
         }
         int no = 1;
         for (Appointment appointment : poliQueue) {
-            System.out.println(no + ". " + appointment);
+            System.out.println(no + ".");
+            System.out.println("Queue Number : " + appointment.getQueueNumber());
+            System.out.println("Patient      : " + appointment.getPatient().getFullName());
+            System.out.println("Doctor       : " + appointment.getDoctor().getFullName());
+            System.out.println("Date         : " + appointment.appointmentDate());
+            System.out.println("Time         : " + appointment.getAppointmentTime());
+            System.out.println("Status       : " + appointment.getAppointmentStatus());
+            System.out.println("--------------------------------");
             no++;
         }
     }
 
+
+
+    public void showMyQueue(Patient patient) {
+        ArrayList<Appointment> myAppointments = new ArrayList<>();
+        for (Appointment appointment : poliQueue) {
+            if (appointment.getPatient().equals(patient)
+                && appointment.getAppointmentStatus() == AppointmentStatus.PENDING) {
+                myAppointments.add(appointment);
+            }
+        }
+        if (myAppointments.isEmpty()) {
+            System.out.println("You don't have any active appointment.");
+            return;
+        }
+
+        for (Appointment myAppointment : myAppointments) {
+            Doctor doctor = myAppointment.getDoctor();
+            ArrayList<Appointment> doctorQueue = new ArrayList<>();
+            for (Appointment appointment : poliQueue) {
+                if (appointment.getDoctor().equals(doctor)
+                        && appointment.getAppointmentStatus() == AppointmentStatus.PENDING) {
+                    doctorQueue.add(appointment);
+                }
+            }
+            doctorQueue.sort(Comparator.comparing(Appointment::getAppointmentTime));
+            System.out.println();
+            System.out.println("=== " + doctor.getFullName().toUpperCase() + " QUEUE ===");
+
+            int no = 1;
+            for (Appointment appointment : doctorQueue) {
+                String mark = "";
+                if (appointment.equals(myAppointment)) {
+                    mark = " <-- YOU";
+                }
+                System.out.println(no + ". "+ appointment.getAppointmentTime() + " | " + appointment.getPatient().getFullName() + mark);
+                no++;
+            }
+
+            int myPosition = doctorQueue.indexOf(myAppointment) + 1;
+            System.out.println();
+            System.out.println("Your Queue Number : " + myPosition);
+            System.out.println("Your Appointment  : " + myAppointment.getAppointmentTime());
+        }
+    }
 
 
 
