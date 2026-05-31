@@ -1067,7 +1067,10 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
 
 
 
+    
+    
     public Patient choosePatientFromListDoc(Doctor  doctor) {
+        nowChecking(doctor);
         ArrayList<Patient> patientList = new ArrayList<>();
         for (Appointment appointment : appointments) {
             if (appointment.getDoctor().getIdDoctor().equals(doctor.getIdDoctor())) {
@@ -1101,11 +1104,37 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
 
 
 
+    public void nowChecking(Doctor doctor){
+        ArrayList<Appointment> doctorQueue = new ArrayList<>();
+        for (Appointment appointment : poliQueue) {
+            if (appointment.getDoctor().getIdDoctor().equals(doctor.getIdDoctor())
+                    && appointment.getAppointmentStatus() == AppointmentStatus.PENDING) {
+                doctorQueue.add(appointment);
+            }
+        }
+        doctorQueue.sort(Comparator.comparing(Appointment::getAppointmentTime));
+        if (!doctorQueue.isEmpty()) {
+            Appointment nextPatient = doctorQueue.get(0);
+            System.out.println();
+            System.out.println("NOW CHECKING");
+            System.out.println("Patient   : " + nextPatient.getPatient().getFullName());
+            System.out.println("Time      : " + nextPatient.getAppointmentTime());
+            System.out.println("Date      : " + nextPatient.appointmentDate());
+            System.out.println("Complaint : " + nextPatient.getComplain());
+            System.out.println("--------------------------------");
+        }
+    }
+
+
+
     public Patient searchPatientByIdOrNameDoc(Doctor doctor) {
+        nowChecking(doctor);
+        System.out.println();
+        
         System.out.print("Input patient ID or name: ");
         String keyword = scan.next().toLowerCase() + scan.nextLine().toLowerCase();
         ArrayList<Patient> result = new ArrayList<>();
-
+        
         for (Appointment appointment : appointments) {
             if (appointment.getDoctor().getIdDoctor().equals(doctor.getIdDoctor())) {
                 Patient patient = appointment.getPatient();
@@ -1345,7 +1374,7 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
                     break;
 
                 case 8:
-                    System.out.println("buy medicine");
+                    buyMedicine(patient);
                     break;
 
                 case 9:
@@ -1618,8 +1647,141 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
 
 
 
+    public void buyMedicine(Patient patient) {
+        int input = 0 ;
+        do {
+            System.out.println();
+            System.out.println("=== BUY MEDICINE ===");
+            System.out.println("1. Buy Medicine");
+            System.out.println("2. Redeem Prescription");
+            System.out.println("3. Back");
+            System.out.print("Input: ");
+            input = scan.nextInt();
+            scan.nextLine();
+
+            switch (input) {
+                case 1:
+                    buyNonControlledMedicine(patient);
+                    break;
+                case 2:
+                    redeemPrescription(patient);
+                    break;
+                case 3:
+                    return;
+                default:
+                    System.out.println("Invalid input.");
+            }
+        } while (input != 3);
+    }
 
 
+
+    public void buyNonControlledMedicine(Patient patient) {
+        ArrayList<Medicine> availableMedicines = new ArrayList<>();
+        for (Medicine medicine : medicines.values()) {
+            if (!medicine.isControlled()) {
+                availableMedicines.add(medicine);
+            }
+        }
+        if (availableMedicines.isEmpty()) {
+            System.out.println("No medicine available.");
+            return;
+        }
+
+        HashMap<Medicine, Integer> cart = new HashMap<>();
+        System.out.println();
+        System.out.println("=== NON-CONTROLLED MEDICINES ===");
+        for (int i = 0; i < availableMedicines.size(); i++) {
+            Medicine med = availableMedicines.get(i);
+            System.out.println((i + 1) + ". " + med.getMedName() + " | Rp" + med.getPrice());
+        }
+        while (true) {
+            System.out.print("Choose medicine number (enter to finish): ");
+            String input = scan.nextLine();
+            if (input.isEmpty()) {
+                break;
+            }
+            int choice = Integer.parseInt(input);
+            if (choice < 1 || choice > availableMedicines.size()) {
+                System.out.println("Invalid choice.");
+                continue;
+            }
+            Medicine selectedMedicine = availableMedicines.get(choice - 1);
+            System.out.print("Qty: ");
+            int qty = scan.nextInt();
+            scan.nextLine();
+            cart.put(selectedMedicine, cart.getOrDefault(selectedMedicine, 0) + qty);
+            System.out.println(selectedMedicine.getMedName() + " added.");
+        }
+        if (cart.isEmpty()) {
+            System.out.println("No medicine selected.");
+            return;
+        }
+
+        int total = 0;
+        System.out.println();
+        System.out.println("=== PURCHASE SUMMARY ===");
+        for (Medicine med : cart.keySet()) {
+            int qty = cart.get(med);
+            int subtotal = qty * med.getPrice();
+            System.out.println(med.getMedName() + " x " + qty + " = Rp" + subtotal);
+            total += subtotal;
+        }
+        System.out.println("--------------------");
+        System.out.println("Total : Rp" + total);
+        System.out.println("Purchase successful.");
+    }
+
+
+
+    public void redeemPrescription(Patient patient) {
+        ArrayList<Prescription> availablePrescriptions = new ArrayList<>();
+        for (Prescription prescription : patient.getPrescriptions()) {
+            if (!prescription.isCompleted()) {
+                availablePrescriptions.add(prescription);
+            }
+        }
+        if (availablePrescriptions.isEmpty()) {
+            System.out.println("No prescription available.");
+            return;
+        }
+
+        System.out.println();
+        System.out.println("=== PRESCRIPTIONS ===");
+        for (int i = 0; i < availablePrescriptions.size(); i++) {
+            Prescription prescription = availablePrescriptions.get(i);
+            System.out.println((i + 1) + ". Prescription ID: " + prescription.getIdPrescription());
+            int total = 0;
+            for (Medicine medicine : prescription.getMedicines().keySet()) {
+                int qty = prescription.getMedicines().get(medicine);
+                System.out.println("   - " + medicine.getMedName() + " x " + qty);
+                total += qty * medicine.getPrice();
+            }
+            System.out.println("   Total : Rp" + total);
+            System.out.println();
+        }
+
+        System.out.print("Choose prescription: ");
+        int choice = scan.nextInt();
+        scan.nextLine();
+        if (choice < 1 || choice > availablePrescriptions.size()) {
+            System.out.println("Invalid choice.");
+            return;
+        }
+        Prescription selectedPrescription =
+            availablePrescriptions.get(choice - 1);
+        int total = 0;
+        for (Medicine medicine : selectedPrescription.getMedicines().keySet()) {
+            int qty = selectedPrescription.getMedicines().get(medicine);
+            total += qty * medicine.getPrice();
+        }
+
+        System.out.println();
+        System.out.println("Prescription redeemed.");
+        System.out.println("Total Payment : Rp" + total);
+        selectedPrescription.setCompleted(true);
+        pharmacyQueue.remove(selectedPrescription);
+    }
 
 
 
