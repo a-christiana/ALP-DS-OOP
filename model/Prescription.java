@@ -8,7 +8,7 @@ public class Prescription {
     private Doctor doctor;
     private HashMap<Medicine, Integer> medicines;
     private boolean completed;
-
+    
     public Prescription(String idPrescription, Patient patient, Doctor doctor) {
         this.idPrescription = idPrescription;
         this.patient = patient;
@@ -16,31 +16,35 @@ public class Prescription {
         this.medicines = new HashMap<>();
         this.completed = false;
     }
-
+    
     public String getIdPrescription() {
         return idPrescription;
     }
-
+    
     public Patient getPatient() {
         return patient;
     }
-
+    
     public Doctor getDoctor() {
         return doctor;
     }
-
+    
     public HashMap<Medicine, Integer> getMedicines() {
         return medicines;
     }
-
+    
     public boolean isCompleted() {
         return completed;
     }
-
+    
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+    }
+    
     public void addMedicine(Medicine medicine, int qty) {
         medicines.put(medicine, qty);
     }
-
+    
     public double total() {
         double total = 0;
 

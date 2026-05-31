@@ -3,7 +3,7 @@ package model;
 public class Medicine {
     public String idMedicine;
     public String medicineName;
-    public double price;
+    public int price;
     public boolean controlledSubstance;
     
     public Medicine() {
@@ -13,7 +13,7 @@ public class Medicine {
         controlledSubstance = false;
     }
     
-    public Medicine(String idMedicine, String medicineName, double price, boolean controlledSubstance) {
+    public Medicine(String idMedicine, String medicineName, int price, boolean controlledSubstance) {
         this.idMedicine =idMedicine;
         this.medicineName = medicineName;
         this.price = price;
@@ -46,7 +46,7 @@ public class Medicine {
         return idMedicine;
     }
 
-    public double getPrice() {
+    public int getPrice() {
         return price;
     }
 
