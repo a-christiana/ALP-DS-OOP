@@ -57,6 +57,7 @@ public class Doctor extends User{
             return;
         }
         for (DoctorSchedule schedule : doctorSchedules) {
+            System.out.println();
             schedule.showDetail();
         }
     }

@@ -15,7 +15,7 @@ public class Appointment {
     private String complain;
 
     
-    public Appointment (String idAppointment, Doctor doctor, Patient patient, LocalDate appointmentDate, LocalTime appoinmentTime, String complain) {
+    public Appointment (String idAppointment, Doctor doctor, Patient patient, LocalDate appointmentDate, LocalTime appointmentTime, String complain) {
         this.idAppointment = idAppointment;
         this.doctor = doctor;
         this.patient = patient;

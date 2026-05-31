@@ -8,6 +8,5 @@ public class App {
         PoliSystem p = new PoliSystem();
         DummyData.dummyData(p);
         p.start();
-        //testsetesett
     }
 }
