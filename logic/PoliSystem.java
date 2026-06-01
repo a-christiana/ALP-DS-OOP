@@ -20,6 +20,7 @@ public class PoliSystem {
     private Queue<Appointment> poliQueue;
     private Queue<Prescription> pharmacyQueue;
     private PriorityQueue<EmergencyCase> emergencyQueue;
+    private HashMap<String, Appointment> currentPatient;
 
     public PoliSystem() {
         users = new HashMap<>();
@@ -41,6 +42,8 @@ public class PoliSystem {
 
             return e1.getArrivalTime().compareTo(e2.getArrivalTime());
         });
+
+        currentPatient = new HashMap<>();
     }
 
     public void start() {
@@ -864,8 +867,8 @@ public class PoliSystem {
             System.out.println("=== DOCTOR MENU ===");
             System.out.println("Hello, " + doctor.getFullName());
             System.out.println("1. View Queue");
-            System.out.println("2. Select Patient");
-            System.out.println("3. Call Next Doctor");
+            System.out.println("2. Call Next Patient");
+            System.out.println("3. Current Consultation");
             System.out.println("4. Logout");
             System.out.print("Input: ");
             input = scan.nextInt();
@@ -877,85 +880,55 @@ public class PoliSystem {
                     showDoctorQueue(doctor);
                     break;
                 case 2:
-                    selectPatientDoc(doctor);
+                    callNextPatient(doctor);
                     break;
                 case 3:
-                    callNextPatient(doctor);
+                    currentConsultation(doctor);
                     break;
                 case 4:
                     start();
+                    break;
                 default:
                     System.out.println("Menu not available.");
-                    UserDoctor(doctor);
                     break;
             }
         } while (input != 4);
     }
 
     public void showDoctorQueue(Doctor activeDoctor) {
-        int input = 0;
-        do {
-            System.out.println();
-            System.out.println("=== MY PATIENT QUEUE ===");
-            ArrayList<Appointment> doctorQueue = new ArrayList<>();
-            for (Appointment appointment : poliQueue) {
-                if (appointment.getDoctor().getIdDoctor().equals(activeDoctor.getIdDoctor())
-                        && appointment.getAppointmentStatus().equals(AppointmentStatus.PENDING)) {
-                    doctorQueue.add(appointment);
+        System.out.println();
+        System.out.println("=== MY PATIENT QUEUE ===");
+
+        boolean hasQueue = false;
+
+        for (DoctorSchedule schedule : activeDoctor.getDoctorSchedules()) {
+            Queue<Appointment> queue = schedule.getAppointmentQueue();
+
+            if (!queue.isEmpty()) {
+                hasQueue = true;
+
+                System.out.println();
+                System.out.println("Date : " + schedule.getDate());
+                System.out.println("Time : " + schedule.getStartTime() + " - " + schedule.getEndTime());
+                System.out.println("Slot : " + queue.size() + "/" + schedule.getMaxPatient());
+                System.out.println("--------------------------------");
+
+                int no = 1;
+                for (Appointment appointment : queue) {
+                    System.out.println(no + ". "
+                            + appointment.getAppointmentTime()
+                            + " | "
+                            + appointment.getPatient().getFullName()
+                            + " | "
+                            + appointment.getComplain());
+                    no++;
                 }
             }
-            if (doctorQueue.isEmpty()) {
-                System.out.println("No queue available.");
-                return;
-            }
+        }
 
-            doctorQueue.sort(
-                    Comparator.comparing(Appointment::appointmentDate).thenComparing(Appointment::getAppointmentTime));
-            Appointment nextPatient = doctorQueue.get(0);
-            System.out.println("NOW CHECKING");
-            System.out.println("Patient   : " + nextPatient.getPatient().getFullName());
-            System.out.println("Time      : " + nextPatient.getAppointmentTime());
-            System.out.println("Date      : " + nextPatient.appointmentDate());
-            System.out.println("Complaint : " + nextPatient.getComplain());
-            System.out.println("--------------------------------");
-
-            LocalDate currentDate = null;
-            int in = 1;
-            for (Appointment appointment : doctorQueue) {
-                if (!appointment.appointmentDate().equals(currentDate)) {
-                    currentDate = appointment.appointmentDate();
-                    in = 1;
-                    System.out.println();
-                    System.out.println("Date : " + currentDate);
-                }
-                System.out.println(
-                        in + ". " + appointment.getAppointmentTime() + " | " + appointment.getPatient().getFullName());
-                in++;
-            }
-
-            System.out.println();
-            System.out.println("1. View Medical Record");
-            System.out.println("2. Back");
-            System.out.print("Input: ");
-            input = scan.nextInt();
-            switch (input) {
-                case 1:
-                    System.out.print("Select Appointment No: ");
-                    int select = scan.nextInt();
-                    if (select < 1 || select > doctorQueue.size()) {
-                        System.out.println("Invalid choice.");
-                        return;
-                    }
-                    Patient selectedPatient = doctorQueue.get(select - 1).getPatient();
-                    viewMedicalRecordsByPatient(selectedPatient);
-                    break;
-                case 2:
-                    UserDoctor(activeDoctor);
-                default:
-                    System.out.println("Please input from 1-3");
-                    showDoctorQueue(activeDoctor);
-            }
-        } while (input != 2);
+        if (!hasQueue) {
+            System.out.println("No queue available.");
+        }
     }
 
     public void selectPatientDoc(Doctor activeDoctor) {
@@ -1131,6 +1104,12 @@ public class PoliSystem {
     public void callNextPatient(Doctor doctor) {
         System.out.println("=== CALL NEXT PATIENT ===");
 
+        if (currentPatient.containsKey(doctor.getIdDoctor())) {
+            System.out.println("You still have a patient in consultation.");
+            System.out.println("Please complete the current consultation first.");
+            return;
+        }
+
         ArrayList<DoctorSchedule> scheduleList = doctor.getDoctorSchedules();
 
         if (scheduleList.isEmpty()) {
@@ -1153,17 +1132,87 @@ public class PoliSystem {
         }
 
         DoctorSchedule selectedSchedule = scheduleList.get(choice - 1);
-        Appointment nextPatient = selectedSchedule.callNextPatient();
 
-        if (nextPatient == null) {
+        if (selectedSchedule.getAppointmentQueue().isEmpty()) {
             System.out.println("No patient in this queue.");
             return;
         }
 
-        nextPatient.completeAppointment();
+        Appointment nextPatient = selectedSchedule.getAppointmentQueue().peek();
 
+        currentPatient.put(doctor.getIdDoctor(), nextPatient);
+
+        System.out.println();
         System.out.println("Now calling:");
         nextPatient.showDetail();
+    }
+
+    public void currentConsultation(Doctor doctor) {
+        Appointment current = currentPatient.get(doctor.getIdDoctor());
+
+        if (current == null) {
+            System.out.println("No patient currently being examined.");
+            return;
+        }
+
+        int input = 0;
+
+        do {
+            System.out.println();
+            System.out.println("=== CURRENT CONSULTATION ===");
+            System.out.println("Patient   : " + current.getPatient().getFullName());
+            System.out.println("Complaint : " + current.getComplain());
+            System.out.println("Time      : " + current.getAppointmentTime());
+            System.out.println();
+            System.out.println("1. View Medical Records");
+            System.out.println("2. Create Medical Record & Prescription");
+            System.out.println("3. Complete Consultation");
+            System.out.println("4. Back");
+            System.out.print("Input: ");
+
+            input = scan.nextInt();
+            scan.nextLine();
+
+            switch (input) {
+                case 1:
+                    viewMedicalRecordsByPatient(current.getPatient());
+                    break;
+
+                case 2:
+                    createMedicalRecord(current.getPatient(), doctor);
+                    break;
+
+                case 3:
+                    completeCurrentConsultation(doctor);
+                    return;
+
+                case 4:
+                    return;
+
+                default:
+                    System.out.println("Invalid input.");
+            }
+
+        } while (input != 4);
+    }
+
+    public void completeCurrentConsultation(Doctor doctor) {
+        Appointment current = currentPatient.get(doctor.getIdDoctor());
+
+        if (current == null) {
+            System.out.println("No patient currently being examined.");
+            return;
+        }
+
+        current.completeAppointment();
+
+        DoctorSchedule schedule = current.getDoctorSchedule();
+        schedule.getAppointmentQueue().remove(current);
+
+        currentPatient.remove(doctor.getIdDoctor());
+
+        System.out.println("Consultation completed.");
+        System.out.println("Patient removed from queue.");
     }
 
     public void createMedicalRecord(Patient selectedPatient, Doctor activeDoctor) {
@@ -1243,21 +1292,24 @@ public class PoliSystem {
     }
 
     public void completeAppointment(Doctor doctor, Patient patient) {
-        Appointment target = null;
-        for (Appointment appointment : poliQueue) {
-            boolean sameDoctor = appointment.getDoctor().getIdDoctor().equals(doctor.getIdDoctor());
-            boolean samePatient = appointment.getPatient().getIdPatient().equals(patient.getIdPatient());
-            if (sameDoctor && samePatient) {
-                target = appointment;
-                break;
+        for (DoctorSchedule schedule : doctor.getDoctorSchedules()) {
+            Queue<Appointment> queue = schedule.getAppointmentQueue();
+
+            for (Appointment appointment : queue) {
+                boolean samePatient = appointment.getPatient().getIdPatient().equals(patient.getIdPatient());
+                boolean pending = appointment.getAppointmentStatus() == AppointmentStatus.PENDING;
+
+                if (samePatient && pending) {
+                    appointment.completeAppointment();
+                    queue.remove(appointment);
+
+                    System.out.println("Appointment completed.");
+                    return;
+                }
             }
         }
 
-        if (target != null) {
-            target.completeAppointment();
-            poliQueue.remove(target);
-            System.out.println("Appointment completed.");
-        }
+        System.out.println("No active appointment found.");
     }
 
     // USER PASIEN
@@ -1724,13 +1776,17 @@ public class PoliSystem {
     }
 
     public boolean isPatientInDoctorQueue(Doctor doctor, Patient patient) {
-        for (Appointment appointment : poliQueue) {
-            boolean sameDoctor = appointment.getDoctor().getIdDoctor().equals(doctor.getIdDoctor());
-            boolean samePatient = appointment.getPatient().getIdPatient().equals(patient.getIdPatient());
-            if (sameDoctor && samePatient) {
-                return true;
+        for (DoctorSchedule schedule : doctor.getDoctorSchedules()) {
+            for (Appointment appointment : schedule.getAppointmentQueue()) {
+                boolean samePatient = appointment.getPatient().getIdPatient().equals(patient.getIdPatient());
+                boolean pending = appointment.getAppointmentStatus() == AppointmentStatus.PENDING;
+
+                if (samePatient && pending) {
+                    return true;
+                }
             }
         }
+
         return false;
     }
 
@@ -1792,7 +1848,6 @@ public class PoliSystem {
         appointments.add(appointment);
 
         appointment.getDoctorSchedule().addAppointment(appointment);
-        poliQueue.offer(appointment);
 
         appointment.getPatient().addAppointmentHistory(appointment);
         appointment.getDoctor().addAppointment(appointment);
