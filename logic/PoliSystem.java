@@ -1591,12 +1591,18 @@ public class PoliSystem {
 
     public void showMyQueue(Patient patient) {
         ArrayList<Appointment> myAppointments = new ArrayList<>();
-        for (Appointment appointment : poliQueue) {
-            if (appointment.getPatient().equals(patient)
-                    && appointment.getAppointmentStatus() == AppointmentStatus.PENDING) {
-                myAppointments.add(appointment);
+
+        for (Doctor doctor : doctors.values()) {
+            for (DoctorSchedule schedule : doctor.getDoctorSchedules()) {
+                for (Appointment appointment : schedule.getAppointmentQueue()) {
+                    if (appointment.getPatient().getIdPatient().equals(patient.getIdPatient())
+                            && appointment.getAppointmentStatus() == AppointmentStatus.PENDING) {
+                        myAppointments.add(appointment);
+                    }
+                }
             }
         }
+
         if (myAppointments.isEmpty()) {
             System.out.println("You don't have any active appointment.");
             return;
@@ -1604,31 +1610,42 @@ public class PoliSystem {
 
         for (Appointment myAppointment : myAppointments) {
             Doctor doctor = myAppointment.getDoctor();
-            ArrayList<Appointment> doctorQueue = new ArrayList<>();
-            for (Appointment appointment : poliQueue) {
-                if (appointment.getDoctor().equals(doctor)
-                        && appointment.getAppointmentStatus() == AppointmentStatus.PENDING) {
-                    doctorQueue.add(appointment);
-                }
-            }
-            doctorQueue.sort(Comparator.comparing(Appointment::getAppointmentTime));
+            DoctorSchedule schedule = myAppointment.getDoctorSchedule();
+            Queue<Appointment> queue = schedule.getAppointmentQueue();
+
             System.out.println();
-            System.out.println("=== " + doctor.getFullName().toUpperCase() + " QUEUE ===");
+            System.out.println("=== MY QUEUE ===");
+            System.out.println("Doctor : " + doctor.getFullName());
+            System.out.println("Date   : " + schedule.getDate());
+            System.out.println("Time   : " + schedule.getStartTime() + " - " + schedule.getEndTime());
+            System.out.println("--------------------------------");
 
             int no = 1;
-            for (Appointment appointment : doctorQueue) {
+            for (Appointment appointment : queue) {
                 String mark = "";
-                if (appointment.equals(myAppointment)) {
+
+                if (appointment.getPatient().getIdPatient().equals(patient.getIdPatient())) {
                     mark = " <-- YOU";
                 }
-                System.out.println(no + ". " + appointment.getAppointmentTime() + " | "
-                        + appointment.getPatient().getFullName() + mark);
+
+                System.out.println(no + ". "
+                        + appointment.getAppointmentTime()
+                        + " | "
+                        + appointment.getPatient().getFullName()
+                        + mark);
                 no++;
             }
 
-            int myPosition = doctorQueue.indexOf(myAppointment) + 1;
+            int position = 1;
+            for (Appointment appointment : queue) {
+                if (appointment.equals(myAppointment)) {
+                    break;
+                }
+                position++;
+            }
+
             System.out.println();
-            System.out.println("Your Queue Number : " + myPosition);
+            System.out.println("Your Queue Number : " + position);
             System.out.println("Your Appointment  : " + myAppointment.getAppointmentTime());
         }
     }
