@@ -1362,7 +1362,7 @@ public class PoliSystem {
                     break;
 
                 case 7:
-                    System.out.println("Pharmacy queue");
+                    showPharmacyQueue(patient);
                     break;
 
                 case 8:
@@ -1647,6 +1647,44 @@ public class PoliSystem {
             System.out.println();
             System.out.println("Your Queue Number : " + position);
             System.out.println("Your Appointment  : " + myAppointment.getAppointmentTime());
+        }
+    }
+
+    public void showPharmacyQueue(Patient patient) {
+        System.out.println();
+        System.out.println("=== PHARMACY QUEUE ===");
+
+        if (pharmacyQueue.isEmpty()) {
+            System.out.println("No pharmacy queue available.");
+            return;
+        }
+
+        int no = 1;
+        int myPosition = 0;
+
+        for (Prescription prescription : pharmacyQueue) {
+            String mark = "";
+
+            if (prescription.getPatient().getIdPatient().equals(patient.getIdPatient())) {
+                mark = " <-- YOU";
+                myPosition = no;
+            }
+
+            System.out.println(no + ". "
+                    + prescription.getPatient().getFullName()
+                    + " | Prescription ID: "
+                    + prescription.getIdPrescription()
+                    + mark);
+
+            no++;
+        }
+
+        if (myPosition == 0) {
+            System.out.println();
+            System.out.println("You don't have any active pharmacy queue.");
+        } else {
+            System.out.println();
+            System.out.println("Your Pharmacy Queue Number : " + myPosition);
         }
     }
 

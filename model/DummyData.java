@@ -118,6 +118,12 @@ public class DummyData {
         p4.addPrescription(pr4);
         p5.addPrescription(pr5);
 
+        x.addPharmacyQueue(pr1);
+        x.addPharmacyQueue(pr2);
+        x.addPharmacyQueue(pr3);
+        x.addPharmacyQueue(pr4);
+        x.addPharmacyQueue(pr5);
+
         MedicalRecord mr1 = new MedicalRecord("MR001", p1, d10, "Pusing, demam, dan nyeri otot", "Influenza",
                 "Pemberian obat penurun demam dan istirahat cukup", pr1);
         MedicalRecord mr2 = new MedicalRecord("MR001", p2, d8, "Gatal dan bentol merah pada tangan dan leher",
