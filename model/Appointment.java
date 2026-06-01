@@ -13,23 +13,25 @@ public class Appointment {
     private int queueNumber;
     private LocalTime appointmentTime;
     private String complain;
+    private DoctorSchedule doctorSchedule;
 
-    
-    public Appointment (String idAppointment, Doctor doctor, Patient patient, LocalDate appointmentDate, LocalTime appointmentTime, String complain) {
+    public Appointment(String idAppointment, Doctor doctor, Patient patient,
+            DoctorSchedule doctorSchedule, LocalTime appointmentTime, String complain) {
         this.idAppointment = idAppointment;
         this.doctor = doctor;
         this.patient = patient;
-        this.appointmentDate = appointmentDate;
+        this.doctorSchedule = doctorSchedule;
+        this.appointmentDate = doctorSchedule.getDate();
         this.appointmentTime = appointmentTime;
         this.status = AppointmentStatus.PENDING;
         this.queueNumber = nextQueueNumber++;
         this.complain = complain;
     }
-    
+
     public String getIdAppointment() {
         return idAppointment;
     }
-    
+
     public Patient getPatient() {
         return patient;
     }
@@ -41,21 +43,25 @@ public class Appointment {
     public AppointmentStatus getAppointmentStatus() {
         return status;
     }
-    
+
     public LocalDate appointmentDate() {
         return appointmentDate;
     }
-    
+
     public int getQueueNumber() {
         return queueNumber;
     }
-    
+
     public LocalTime getAppointmentTime() {
         return appointmentTime;
     }
 
     public String getComplain() {
         return complain;
+    }
+
+    public DoctorSchedule getDoctorSchedule() {
+        return doctorSchedule;
     }
 
     public void pendingAppointment() {
@@ -69,7 +75,6 @@ public class Appointment {
     public void completeAppointment() {
         status = AppointmentStatus.COMPLETED;
     }
-
 
     public void showDetail() {
         System.out.println("=== APPOINTMENT DETAIL ===");

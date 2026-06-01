@@ -21,9 +21,6 @@ public class PoliSystem {
     private Queue<Prescription> pharmacyQueue;
     private PriorityQueue<EmergencyCase> emergencyQueue;
 
-
-
-
     public PoliSystem() {
         users = new HashMap<>();
         doctors = new HashMap<>();
@@ -36,25 +33,19 @@ public class PoliSystem {
         poliQueue = new LinkedList<>();
         pharmacyQueue = new LinkedList<>();
 
-        emergencyQueue = new PriorityQueue<>((e1, e2) -> { int compareTriage = Integer.compare(e1.getTriageLevel().getPriority(), e2.getTriageLevel().getPriority());
-        if (compareTriage != 0) {
-            return compareTriage;
-        }
+        emergencyQueue = new PriorityQueue<>((e1, e2) -> {
+            int compareTriage = Integer.compare(e1.getTriageLevel().getPriority(), e2.getTriageLevel().getPriority());
+            if (compareTriage != 0) {
+                return compareTriage;
+            }
 
-        return e1.getArrivalTime().compareTo(e2.getArrivalTime());
+            return e1.getArrivalTime().compareTo(e2.getArrivalTime());
+        });
     }
-);
-    }
-
-
-
-
-
-
 
     public void start() {
         int choose = 0;
-        do{
+        do {
             System.out.println();
             System.out.print("1. Login\n2. Register\n3. Exit\nChoose Menu: ");
             choose = scan.nextInt();
@@ -62,93 +53,85 @@ public class PoliSystem {
             String usernametext;
             String passwordtext;
             switch (choose) {
-            case 1:
-                System.out.println();
-                System.out.println("=== LOGIN ===");
-                System.out.print("Username: ");
-                usernametext = scan.next() + scan.nextLine();
-                System.out.print("Password: ");
-                passwordtext = scan.next() + scan.nextLine();
-                
-                User user = users.get(usernametext);
-                if (user == null) {
-                    System.out.println("username not found!");
-                    start();
-                }
-                if (!user.getPassword().equals(passwordtext)) {
-                    System.out.println("Wrong password");
-                    start();
-                }
-                System.out.println("Login success");
-                if (user.getRole() == Role.ADMIN) {
-                    UserAdmin();
-                } else if (user.getRole() == Role.DOCTOR) {
-                    UserDoctor((Doctor) user);
-                } else if (user.getRole() == Role.PATIENT) {
-                    UserPatient((Patient) user);
-                }
-                break;
+                case 1:
+                    System.out.println();
+                    System.out.println("=== LOGIN ===");
+                    System.out.print("Username: ");
+                    usernametext = scan.next() + scan.nextLine();
+                    System.out.print("Password: ");
+                    passwordtext = scan.next() + scan.nextLine();
 
+                    User user = users.get(usernametext);
+                    if (user == null) {
+                        System.out.println("username not found!");
+                        start();
+                    }
+                    if (!user.getPassword().equals(passwordtext)) {
+                        System.out.println("Wrong password");
+                        start();
+                    }
+                    System.out.println("Login success");
+                    if (user.getRole() == Role.ADMIN) {
+                        UserAdmin();
+                    } else if (user.getRole() == Role.DOCTOR) {
+                        UserDoctor((Doctor) user);
+                    } else if (user.getRole() == Role.PATIENT) {
+                        UserPatient((Patient) user);
+                    }
+                    break;
 
-            case 2:
-                System.out.println("=== REGISTER PATIENT ===");
-                System.out.print("Username: ");
-                String usernameText = scan.next() + scan.nextLine();
-                if (users.containsKey(usernameText)) {
-                    System.out.println("Username sudah digunakan.");
-                    start();
-                }
-                
-                System.out.print("Password: ");
-                String passwordText = scan.next() + scan.nextLine();
-                String idUser = "U" + String.format("%05d", users.size() + 1);
-                String idPatient = "P" + String.format("%05d", patients.size() + 1);
-                
-                System.out.print("Full Name: ");
-                String fullName = scan.next() + scan.nextLine();
-                
-                System.out.print("NIK: ");
-                String nik = scan.next() + scan.nextLine();
-                
-                System.out.print("Phone Number: ");
-                String phoneNumber = scan.next() + scan.nextLine();
-                
-                
-                Patient newPatient = new Patient(
-                    idUser,
-                    usernameText,
-                    passwordText,
-                    idPatient,
-                    fullName,
-                    nik,
-                    phoneNumber);
+                case 2:
+                    System.out.println("=== REGISTER PATIENT ===");
+                    System.out.print("Username: ");
+                    String usernameText = scan.next() + scan.nextLine();
+                    if (users.containsKey(usernameText)) {
+                        System.out.println("Username sudah digunakan.");
+                        start();
+                    }
+
+                    System.out.print("Password: ");
+                    String passwordText = scan.next() + scan.nextLine();
+                    String idUser = "U" + String.format("%05d", users.size() + 1);
+                    String idPatient = "P" + String.format("%05d", patients.size() + 1);
+
+                    System.out.print("Full Name: ");
+                    String fullName = scan.next() + scan.nextLine();
+
+                    System.out.print("NIK: ");
+                    String nik = scan.next() + scan.nextLine();
+
+                    System.out.print("Phone Number: ");
+                    String phoneNumber = scan.next() + scan.nextLine();
+
+                    Patient newPatient = new Patient(
+                            idUser,
+                            usernameText,
+                            passwordText,
+                            idPatient,
+                            fullName,
+                            nik,
+                            phoneNumber);
                     addPatient(newPatient);
                     System.out.println("Register berhasil!");
                     System.out.println("User ID    : " + idUser);
-                System.out.println("Patient ID : " + idPatient);
-                start();
+                    System.out.println("Patient ID : " + idPatient);
+                    start();
 
-            case 3:
-                return;
-            default:
-                System.out.println("Please input from 1-3");
-                start();
+                case 3:
+                    return;
+                default:
+                    System.out.println("Please input from 1-3");
+                    start();
             }
-        } while (choose!=3);
+        } while (choose != 3);
     }
 
-
-
-
-
-
-
-// USER ADMIN
-// USER ADMIN
-// USER ADMIN
+    // USER ADMIN
+    // USER ADMIN
+    // USER ADMIN
     public void UserAdmin() {
         int input = 0;
-        do{
+        do {
             System.out.println();
             System.out.println("=== ADMIN MENU ====");
             System.out.println("1. Kelola Dokter");
@@ -172,11 +155,11 @@ public class PoliSystem {
                 case 3:
                     patientMenu();
                     break;
-                    
+
                 case 4:
                     showAppointment();
                     break;
-                    
+
                 case 5:
                     emergencyMenu();
                     break;
@@ -187,16 +170,13 @@ public class PoliSystem {
                 default:
                     System.out.println("Please input from 1-5");
                     UserAdmin();
-                }
-            }while (input!=5);
-        }
-
-
-
+            }
+        } while (input != 5);
+    }
 
     public void doctorMenu() {
         int inp = 0;
-        do{
+        do {
             System.out.println();
             System.out.println("=== DOCTOR ===");
             System.out.println("1. View Doctor List");
@@ -229,10 +209,8 @@ public class PoliSystem {
                     System.out.println("Please input from 1-5");
                     doctorMenu();
             }
-        }while(inp !=4);
+        } while (inp != 4);
     }
-
-
 
     public void showDoctor() {
         System.out.println("=== DOCTOR LIST ===");
@@ -250,8 +228,6 @@ public class PoliSystem {
             no++;
         }
     }
-
-
 
     public void addDoctorMenu() {
         System.out.println("=== NEW DOCTOR ===");
@@ -288,8 +264,6 @@ public class PoliSystem {
         doctorMenu();
     }
 
-
-
     public void deleteDoctorMenu() {
         System.out.println();
         System.out.println("=== DELETE DOCTOR ===");
@@ -315,9 +289,6 @@ public class PoliSystem {
         System.out.println(deletedDoctor.getFullName() + " berhasil dihapus.");
         doctorMenu();
     }
-
-
-
 
     public void manageDoctorScheduleMenu() {
         System.out.println();
@@ -373,79 +344,73 @@ public class PoliSystem {
         } while (input != 4);
     }
 
+    public void addDoctorScheduleMenu(Doctor doctor) {
+        System.out.println();
+        System.out.println("=== ADD DOCTOR SCHEDULE ===");
 
+        System.out.print("Date Year  : ");
+        int year = scan.nextInt();
 
-public void addDoctorScheduleMenu(Doctor doctor) {
-    System.out.println();
-    System.out.println("=== ADD DOCTOR SCHEDULE ===");
+        System.out.print("Date Month : ");
+        int month = scan.nextInt();
 
-    System.out.print("Date Year  : ");
-    int year = scan.nextInt();
+        System.out.print("Date Day   : ");
+        int day = scan.nextInt();
 
-    System.out.print("Date Month : ");
-    int month = scan.nextInt();
+        System.out.print("Start Hour : ");
+        int startHour = scan.nextInt();
 
-    System.out.print("Date Day   : ");
-    int day = scan.nextInt();
+        System.out.print("Start Min  : ");
+        int startMin = scan.nextInt();
 
-    System.out.print("Start Hour : ");
-    int startHour = scan.nextInt();
+        System.out.print("End Hour   : ");
+        int endHour = scan.nextInt();
 
-    System.out.print("Start Min  : ");
-    int startMin = scan.nextInt();
+        System.out.print("End Min    : ");
+        int endMin = scan.nextInt();
+        scan.nextLine();
 
-    System.out.print("End Hour   : ");
-    int endHour = scan.nextInt();
+        DoctorSchedule schedule = new DoctorSchedule(
+                LocalDate.of(year, month, day),
+                LocalTime.of(startHour, startMin),
+                LocalTime.of(endHour, endMin));
 
-    System.out.print("End Min    : ");
-    int endMin = scan.nextInt();
-    scan.nextLine();
+        doctor.addSchedule(schedule);
 
-    DoctorSchedule schedule = new DoctorSchedule(
-        LocalDate.of(year, month, day),
-        LocalTime.of(startHour, startMin),
-        LocalTime.of(endHour, endMin)
-    );
-
-    doctor.addSchedule(schedule);
-
-    System.out.println("Schedule added successfully.");
-}
-
-
-public void deleteDoctorScheduleMenu(Doctor doctor) {
-    System.out.println();
-    System.out.println("=== DELETE DOCTOR SCHEDULE ===");
-
-    if (doctor.getDoctorSchedules().isEmpty()) {
-        System.out.println("No schedule available.");
-        return;
+        System.out.println("Schedule added successfully.");
     }
 
-    ArrayList<DoctorSchedule> scheduleList = doctor.getDoctorSchedules();
+    public void deleteDoctorScheduleMenu(Doctor doctor) {
+        System.out.println();
+        System.out.println("=== DELETE DOCTOR SCHEDULE ===");
 
-    for (int i = 0; i < scheduleList.size(); i++) {
-        System.out.print((i + 1) + ". ");
-        scheduleList.get(i).showDetail();
+        if (doctor.getDoctorSchedules().isEmpty()) {
+            System.out.println("No schedule available.");
+            return;
+        }
+
+        ArrayList<DoctorSchedule> scheduleList = doctor.getDoctorSchedules();
+
+        for (int i = 0; i < scheduleList.size(); i++) {
+            System.out.print((i + 1) + ". ");
+            scheduleList.get(i).showDetail();
+        }
+
+        System.out.print("Choose schedule: ");
+        int choice = scan.nextInt();
+        scan.nextLine();
+
+        if (choice < 1 || choice > scheduleList.size()) {
+            System.out.println("Invalid choice.");
+            return;
+        }
+
+        scheduleList.remove(choice - 1);
+
+        System.out.println("Schedule deleted successfully.");
     }
 
-    System.out.print("Choose schedule: ");
-    int choice = scan.nextInt();
-    scan.nextLine();
-
-    if (choice < 1 || choice > scheduleList.size()) {
-        System.out.println("Invalid choice.");
-        return;
-    }
-
-    scheduleList.remove(choice - 1);
-
-    System.out.println("Schedule deleted successfully.");
-}
-
-
-
-    public void medicineMenu(){
+    public void medicineMenu() {
         int inp = 0;
         do {
             System.out.println();
@@ -457,7 +422,7 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
             System.out.print("Input: ");
             inp = scan.nextInt();
             System.out.println();
-            
+
             switch (inp) {
                 case 1:
                     showMedicine();
@@ -473,11 +438,9 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
                 default:
                     System.out.println("Please input from 1-4");
                     medicineMenu();
-                }
-            } while(inp != 4);
-        }
-
-
+            }
+        } while (inp != 4);
+    }
 
     public void showMedicine() {
         System.out.println("=== MEDICINE LIST ===");
@@ -496,13 +459,11 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
         medicineMenu();
     }
 
-
-
     public void addMedicineMenu() {
         System.out.println("=== NEW MEDICINE ===");
         System.out.print("Nama Obat: ");
         String namaobat = scan.next() + scan.nextLine();
-        
+
         System.out.print("Harga Obat: ");
         int hargaobat = scan.nextInt();
 
@@ -517,8 +478,6 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
         System.out.println("ID obat: " + idMed);
         medicineMenu();
     }
-
-
 
     public void deleteMedicineMenu() {
         System.out.println("=== DELETE MEDICINE ===");
@@ -552,9 +511,6 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
         medicineMenu();
     }
 
-
-
-
     public void patientMenu() {
         int inp;
         do {
@@ -587,8 +543,6 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
         } while (inp != 4);
     }
 
-
-
     public void showPatient() {
         System.out.println();
         System.out.println("=== PATIENT LIST ===");
@@ -608,8 +562,6 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
         }
     }
 
-
-
     public void addNewPatient() {
         System.out.println();
         System.out.println("=== NEW PATIENT ===");
@@ -628,11 +580,9 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
         System.out.print("Phone Number: ");
         String phoneNumber = scan.next() + scan.nextLine();
 
-
-        
         Patient newPatient = new Patient(
-            idUser,
-            username,
+                idUser,
+                username,
                 passwordText,
                 idPatient,
                 fullName,
@@ -644,8 +594,6 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
         System.out.println("User ID    : " + idUser);
         System.out.println("Patient ID : " + idPatient);
     }
-
-
 
     public void selectPatient() {
         int inp;
@@ -682,8 +630,6 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
         } while (inp != 3);
     }
 
-
-
     public Patient choosePatientFromList() {
         System.out.println();
         if (patients.isEmpty()) {
@@ -712,8 +658,6 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
         }
         return patientList.get(choice - 1);
     }
-
-
 
     public Patient searchPatientByIdOrName() {
         System.out.println();
@@ -754,8 +698,6 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
         return result.get(choice - 1);
     }
 
-
-
     public void selectedPatientActionMenu(Patient patient) {
         int input = 0;
         do {
@@ -789,8 +731,6 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
         } while (input != 3);
     }
 
-
-
     public void viewMedicalRecordsByPatient(Patient patient) {
         System.out.println();
         System.out.println("=== MEDICAL RECORDS ===");
@@ -807,9 +747,6 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
             no++;
         }
     }
-
-
-
 
     public void showAppointment() {
         System.out.println();
@@ -831,8 +768,6 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
             no++;
         }
     }
-
-
 
     public void emergencyMenu() {
         int input = 0;
@@ -866,7 +801,6 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
         } while (input != 4);
     }
 
-
     public void addEmergencyCaseMenu() {
         System.out.println();
         System.out.println("=== ADD EMERGENCY CASE ===");
@@ -879,17 +813,14 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
 
         String emergencyId = "E" + String.format("%03d", emergencyQueue.size() + 1);
         EmergencyCase emergencyCase = new EmergencyCase(
-            emergencyId,
-            patient,
-            complaint
-        );
+                emergencyId,
+                patient,
+                complaint);
         emergencyQueue.offer(emergencyCase);
         System.out.println();
         System.out.println("Emergency case added successfully.");
         emergencyCase.showDetail();
     }
-
-
 
     public void showEmergencyQueue() {
         System.out.println();
@@ -908,8 +839,6 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
         }
     }
 
-
-
     public void handleEmergencyPatient() {
         System.out.println();
         System.out.println("=== HANDLE EMERGENCY PATIENT ===");
@@ -919,29 +848,25 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
         }
 
         EmergencyCase emergencyCase = emergencyQueue.poll();
-        //System.out.println("Next emergency patient:");
+        // System.out.println("Next emergency patient:");
         emergencyCase.showDetail();
         System.out.println();
         System.out.println("Patient is now being handled.");
     }
 
-
-
-
-
-
-// USER DOKTER
-// USER DOKTER
-// USER DOKTER
-    public void UserDoctor(Doctor doctor){
-    int input;
+    // USER DOKTER
+    // USER DOKTER
+    // USER DOKTER
+    public void UserDoctor(Doctor doctor) {
+        int input;
         do {
             System.out.println();
             System.out.println("=== DOCTOR MENU ===");
-            System.out.println( "Hello, " + doctor.getFullName());
+            System.out.println("Hello, " + doctor.getFullName());
             System.out.println("1. View Queue");
             System.out.println("2. Select Patient");
-            System.out.println("3. Logout");
+            System.out.println("3. Call Next Doctor");
+            System.out.println("4. Logout");
             System.out.print("Input: ");
             input = scan.nextInt();
             scan.nextLine();
@@ -955,25 +880,27 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
                     selectPatientDoc(doctor);
                     break;
                 case 3:
+                    callNextPatient(doctor);
+                    break;
+                case 4:
                     start();
                 default:
                     System.out.println("Menu not available.");
                     UserDoctor(doctor);
                     break;
             }
-        }while (input!=3);
+        } while (input != 4);
     }
 
-
-
-    public void showDoctorQueue(Doctor activeDoctor){
+    public void showDoctorQueue(Doctor activeDoctor) {
         int input = 0;
         do {
             System.out.println();
             System.out.println("=== MY PATIENT QUEUE ===");
             ArrayList<Appointment> doctorQueue = new ArrayList<>();
             for (Appointment appointment : poliQueue) {
-                if (appointment.getDoctor().getIdDoctor().equals(activeDoctor.getIdDoctor()) && appointment.getAppointmentStatus().equals(AppointmentStatus.PENDING)) {
+                if (appointment.getDoctor().getIdDoctor().equals(activeDoctor.getIdDoctor())
+                        && appointment.getAppointmentStatus().equals(AppointmentStatus.PENDING)) {
                     doctorQueue.add(appointment);
                 }
             }
@@ -981,8 +908,9 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
                 System.out.println("No queue available.");
                 return;
             }
-    
-            doctorQueue.sort(Comparator.comparing(Appointment::appointmentDate).thenComparing(Appointment::getAppointmentTime));
+
+            doctorQueue.sort(
+                    Comparator.comparing(Appointment::appointmentDate).thenComparing(Appointment::getAppointmentTime));
             Appointment nextPatient = doctorQueue.get(0);
             System.out.println("NOW CHECKING");
             System.out.println("Patient   : " + nextPatient.getPatient().getFullName());
@@ -1000,10 +928,10 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
                     System.out.println();
                     System.out.println("Date : " + currentDate);
                 }
-                System.out.println(in + ". " + appointment.getAppointmentTime() + " | " + appointment.getPatient().getFullName());
+                System.out.println(
+                        in + ". " + appointment.getAppointmentTime() + " | " + appointment.getPatient().getFullName());
                 in++;
             }
-
 
             System.out.println();
             System.out.println("1. View Medical Record");
@@ -1027,11 +955,10 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
                     System.out.println("Please input from 1-3");
                     showDoctorQueue(activeDoctor);
             }
-        } while(input!=2);
+        } while (input != 2);
     }
 
-
-    public void selectPatientDoc(Doctor activeDoctor){
+    public void selectPatientDoc(Doctor activeDoctor) {
         int inp;
         do {
             System.out.println();
@@ -1065,11 +992,7 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
         } while (inp != 3);
     }
 
-
-
-    
-    
-    public Patient choosePatientFromListDoc(Doctor  doctor) {
+    public Patient choosePatientFromListDoc(Doctor doctor) {
         nowChecking(doctor);
         ArrayList<Patient> patientList = new ArrayList<>();
         for (Appointment appointment : appointments) {
@@ -1102,9 +1025,7 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
         return patientList.get(choice - 1);
     }
 
-
-
-    public void nowChecking(Doctor doctor){
+    public void nowChecking(Doctor doctor) {
         ArrayList<Appointment> doctorQueue = new ArrayList<>();
         for (Appointment appointment : poliQueue) {
             if (appointment.getDoctor().getIdDoctor().equals(doctor.getIdDoctor())
@@ -1125,16 +1046,14 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
         }
     }
 
-
-
     public Patient searchPatientByIdOrNameDoc(Doctor doctor) {
         nowChecking(doctor);
         System.out.println();
-        
+
         System.out.print("Input patient ID or name: ");
         String keyword = scan.next().toLowerCase() + scan.nextLine().toLowerCase();
         ArrayList<Patient> result = new ArrayList<>();
-        
+
         for (Appointment appointment : appointments) {
             if (appointment.getDoctor().getIdDoctor().equals(doctor.getIdDoctor())) {
                 Patient patient = appointment.getPatient();
@@ -1167,8 +1086,6 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
         }
         return result.get(choice - 1);
     }
-
-
 
     public void selectedPatientActionMenuDoc(Doctor doctor, Patient patient) {
         int input;
@@ -1211,47 +1128,78 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
         } while (input != 4);
     }
 
+    public void callNextPatient(Doctor doctor) {
+        System.out.println("=== CALL NEXT PATIENT ===");
 
+        ArrayList<DoctorSchedule> scheduleList = doctor.getDoctorSchedules();
 
+        if (scheduleList.isEmpty()) {
+            System.out.println("No schedule available.");
+            return;
+        }
+
+        for (int i = 0; i < scheduleList.size(); i++) {
+            System.out.print((i + 1) + ". ");
+            scheduleList.get(i).showDetail();
+        }
+
+        System.out.print("Choose Schedule: ");
+        int choice = scan.nextInt();
+        scan.nextLine();
+
+        if (choice < 1 || choice > scheduleList.size()) {
+            System.out.println("Invalid choice.");
+            return;
+        }
+
+        DoctorSchedule selectedSchedule = scheduleList.get(choice - 1);
+        Appointment nextPatient = selectedSchedule.callNextPatient();
+
+        if (nextPatient == null) {
+            System.out.println("No patient in this queue.");
+            return;
+        }
+
+        nextPatient.completeAppointment();
+
+        System.out.println("Now calling:");
+        nextPatient.showDetail();
+    }
 
     public void createMedicalRecord(Patient selectedPatient, Doctor activeDoctor) {
         System.out.println();
         System.out.println("=== CREATE MEDICAL RECORD ===");
         int totalRecord = selectedPatient.getMedicalRecords().size() + 1;
         String idRecord = "MR" + String.format("%03d", totalRecord);
-        
+
         System.out.print("Symptoms: ");
         String symptoms = scan.nextLine();
-        
+
         System.out.print("Diagnosis: ");
         String diagnosis = scan.nextLine();
-        
+
         System.out.print("Treatment: ");
         String treatment = scan.nextLine();
-        
+
         Prescription prescription = null;
         System.out.print("Make a prescription? (y/n): ");
         String input = scan.next().toLowerCase() + scan.nextLine().toLowerCase();
         if (input.equals("y")) {
             prescription = createPrescription(selectedPatient, activeDoctor);
         }
-        MedicalRecord record =
-        new MedicalRecord(
-            idRecord,
-            selectedPatient,
-            activeDoctor,
-            symptoms,
-            diagnosis,
-            treatment,
-            prescription
-        );
+        MedicalRecord record = new MedicalRecord(
+                idRecord,
+                selectedPatient,
+                activeDoctor,
+                symptoms,
+                diagnosis,
+                treatment,
+                prescription);
         addMedicalRecord(record, selectedPatient);
         System.out.println("Medical record created.");
     }
-    
-    
-    
-    public Prescription createPrescription(Patient selectedPatient, Doctor activeDoctor){
+
+    public Prescription createPrescription(Patient selectedPatient, Doctor activeDoctor) {
         System.out.println();
         System.out.println("=== CREATE PRESCRIPTION ===");
         int totalPres = selectedPatient.getPrescriptions().size() + 1;
@@ -1294,8 +1242,6 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
         return prescription;
     }
 
-
-
     public void completeAppointment(Doctor doctor, Patient patient) {
         Appointment target = null;
         for (Appointment appointment : poliQueue) {
@@ -1314,21 +1260,15 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
         }
     }
 
-
-
-
-
-
-
-// USER PASIEN
-// USER PASIEN
-// USER PASIEN
+    // USER PASIEN
+    // USER PASIEN
+    // USER PASIEN
     public void UserPatient(Patient patient) {
         int input;
         do {
             System.out.println();
             System.out.println("=== PATIENT MENU ===");
-            System.out.println( "Hello, " + patient.getFullName());
+            System.out.println("Hello, " + patient.getFullName());
             System.out.println("1. View Doctor List");
             System.out.println("2. Make Appointment");
             System.out.println("3. Cancel Appointment");
@@ -1396,8 +1336,6 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
         } while (input != 9);
     }
 
-
-
     public void makeAppointment(Patient patient) {
         System.out.println("=== MAKE APPOINTMENT ===");
         if (doctors.isEmpty()) {
@@ -1438,37 +1376,24 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
             return;
         }
         DoctorSchedule selectedSchedule = scheduleList.get(chooseSchedule - 1);
-        if (!selectedSchedule.isAvailable()) {
-            System.out.println("Jadwal dokter tidak tersedia.");
-            return;
-        }
-        LocalTime appointmentTime = getNextAvailableTime(selectedD, selectedSchedule);
+
+        LocalTime appointmentTime = selectedSchedule.getNextAvailableTime();
+
         if (appointmentTime == null) {
-            System.out.println("Jadwal yang dipilih sudah penuh.");
-            DoctorSchedule nextSchedule = getNextAvailableSchedule(selectedD, selectedSchedule);
-            if (nextSchedule == null) {
-                System.out.println(
-                    "Tidak ada jadwal lain yang tersedia."
-                );
-                return;
-            }
-            selectedSchedule = nextSchedule;
-            appointmentTime = getNextAvailableTime(selectedD, selectedSchedule);
-            System.out.println("Dialihkan ke jadwal berikutnya:");
-            selectedSchedule.showDetail();
+            System.out.println("Jadwal dokter sudah penuh.");
+            return;
         }
 
         System.out.print("Complain: ");
         String complain = scan.nextLine();
         String idAppointment = "A" + String.format("%03d", appointments.size() + 1);
         Appointment appointment = new Appointment(
-            idAppointment,
-            selectedD,
-            patient,
-            selectedSchedule.getDate(),
-            appointmentTime,
-            complain
-        );
+                idAppointment,
+                selectedD,
+                patient,
+                selectedSchedule,
+                appointmentTime,
+                complain);
         addAppointment(appointment);
         System.out.println();
         System.out.println("Appointment added successfully.");
@@ -1476,8 +1401,6 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
         System.out.println();
         appointment.showDetail();
     }
-
-
 
     public LocalTime getNextAvailableTime(Doctor doctor, DoctorSchedule schedule) {
         int durationPerPatient = 20;
@@ -1490,8 +1413,6 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
         }
         return null;
     }
-
-
 
     public DoctorSchedule getNextAvailableSchedule(Doctor doctor, DoctorSchedule currentSchedule) {
         ArrayList<DoctorSchedule> schedules = new ArrayList<>(doctor.getDoctorSchedules());
@@ -1512,8 +1433,6 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
         return null;
     }
 
-
-
     public boolean isSlotAvailable(Doctor doctor, LocalDate date, LocalTime time) {
         for (Appointment appointment : appointments) {
             if (appointment.getAppointmentTime() == null) {
@@ -1530,9 +1449,6 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
         return true;
     }
 
-
-
-    
     public void cancelAppointmentMenu(Patient patient) {
         System.out.println("=== CANCEL APPOINTMENT ===");
         if (patient.getAppointmentHistory().isEmpty()) {
@@ -1558,8 +1474,6 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
         System.out.println("Appointment canceled");
     }
 
-
-    
     public void viewAppointmentHistory(Patient patient) {
         System.out.println("=== BOOKING HISTORY ===");
         if (patient.getAppointmentHistory().isEmpty()) {
@@ -1577,36 +1491,55 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
         }
     }
 
-    
-
     public void showHospitalQueue(Patient patient) {
-        System.out.println();
-        System.out.println("=== HOSPITAL QUEUE ===");
-        if (poliQueue.isEmpty()) {
-            System.out.println("No queue available.");
-            return;
-        }
-        int no = 1;
-        for (Appointment appointment : poliQueue) {
-            System.out.println(no + ".");
-            System.out.println("Queue Number : " + appointment.getQueueNumber());
-            System.out.println("Patient      : " + appointment.getPatient().getFullName());
-            System.out.println("Doctor       : " + appointment.getDoctor().getFullName());
-            System.out.println("Date         : " + appointment.appointmentDate());
-            System.out.println("Time         : " + appointment.getAppointmentTime());
-            System.out.println("Status       : " + appointment.getAppointmentStatus());
-            System.out.println("--------------------------------");
-            no++;
+    System.out.println();
+    System.out.println("=== HOSPITAL QUEUE BY DOCTOR SCHEDULE ===");
+
+    boolean hasQueue = false;
+
+    for (Doctor doctor : doctors.values()) {
+        for (DoctorSchedule schedule : doctor.getDoctorSchedules()) {
+            Queue<Appointment> queue = schedule.getAppointmentQueue();
+
+            if (!queue.isEmpty()) {
+                hasQueue = true;
+
+                System.out.println();
+                System.out.println("Doctor : " + doctor.getFullName());
+                System.out.println("Date   : " + schedule.getDate());
+                System.out.println("Time   : " + schedule.getStartTime() + " - " + schedule.getEndTime());
+                System.out.println("Slot   : " + queue.size() + "/" + schedule.getMaxPatient());
+                System.out.println("--------------------------------");
+
+                int no = 1;
+                for (Appointment appointment : queue) {
+                    String mark = "";
+
+                    if (appointment.getPatient().getIdPatient().equals(patient.getIdPatient())) {
+                        mark = " <-- YOU";
+                    }
+
+                    System.out.println(no + ". "
+                            + appointment.getAppointmentTime()
+                            + " | "
+                            + appointment.getPatient().getFullName()
+                            + mark);
+                    no++;
+                }
+            }
         }
     }
 
-
+    if (!hasQueue) {
+        System.out.println("No queue available.");
+    }
+}
 
     public void showMyQueue(Patient patient) {
         ArrayList<Appointment> myAppointments = new ArrayList<>();
         for (Appointment appointment : poliQueue) {
             if (appointment.getPatient().equals(patient)
-                && appointment.getAppointmentStatus() == AppointmentStatus.PENDING) {
+                    && appointment.getAppointmentStatus() == AppointmentStatus.PENDING) {
                 myAppointments.add(appointment);
             }
         }
@@ -1634,7 +1567,8 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
                 if (appointment.equals(myAppointment)) {
                     mark = " <-- YOU";
                 }
-                System.out.println(no + ". "+ appointment.getAppointmentTime() + " | " + appointment.getPatient().getFullName() + mark);
+                System.out.println(no + ". " + appointment.getAppointmentTime() + " | "
+                        + appointment.getPatient().getFullName() + mark);
                 no++;
             }
 
@@ -1645,10 +1579,8 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
         }
     }
 
-
-
     public void buyMedicine(Patient patient) {
-        int input = 0 ;
+        int input = 0;
         do {
             System.out.println();
             System.out.println("=== BUY MEDICINE ===");
@@ -1673,8 +1605,6 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
             }
         } while (input != 3);
     }
-
-
 
     public void buyNonControlledMedicine(Patient patient) {
         ArrayList<Medicine> availableMedicines = new ArrayList<>();
@@ -1732,8 +1662,6 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
         System.out.println("Purchase successful.");
     }
 
-
-
     public void redeemPrescription(Patient patient) {
         ArrayList<Prescription> availablePrescriptions = new ArrayList<>();
         for (Prescription prescription : patient.getPrescriptions()) {
@@ -1768,8 +1696,7 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
             System.out.println("Invalid choice.");
             return;
         }
-        Prescription selectedPrescription =
-            availablePrescriptions.get(choice - 1);
+        Prescription selectedPrescription = availablePrescriptions.get(choice - 1);
         int total = 0;
         for (Medicine medicine : selectedPrescription.getMedicines().keySet()) {
             int qty = selectedPrescription.getMedicines().get(medicine);
@@ -1783,12 +1710,6 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
         pharmacyQueue.remove(selectedPrescription);
     }
 
-
-
-
-
-
-
     public void showSpecialization() {
         System.out.println();
         System.out.println("=== SPECIALIZATION LIST ===");
@@ -1799,9 +1720,7 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
         System.out.println("5. General Practitioner");
         System.out.println();
     }
-    
-    
-    
+
     public boolean isPatientInDoctorQueue(Doctor doctor, Patient patient) {
         for (Appointment appointment : poliQueue) {
             boolean sameDoctor = appointment.getDoctor().getIdDoctor().equals(doctor.getIdDoctor());
@@ -1812,9 +1731,7 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
         }
         return false;
     }
-    
-    
-    
+
     public String generateDocUsername(String specialization) {
         String code;
         if (specialization.equalsIgnoreCase("Cardiologist")) {
@@ -1830,7 +1747,7 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
         } else {
             code = specialization.toLowerCase().replace(" ", "");
         }
-    
+
         int count = 1;
         for (Doctor doctor : doctors.values()) {
             if (doctor.getSpecialization().equalsIgnoreCase(specialization)) {
@@ -1839,9 +1756,7 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
         }
         return "dokter" + code + String.format("%02d", count);
     }
-    
-    
-    
+
     public String generatePatientUsername(String fullName) {
         String firstName = fullName.split(" ")[0].toLowerCase();
         int count = 1;
@@ -1852,40 +1767,40 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
         }
         return firstName + String.format("%02d", count);
     }
-    
-    
-    
+
     public void addUser(User user) {
         users.put(user.getUname(), user);
     }
-    
+
     public void addDoctor(Doctor doctor) {
         doctors.put(doctor.getIdDoctor(), doctor);
         users.put(doctor.getUname(), doctor);
     }
-    
+
     public void addPatient(Patient patient) {
         patients.put(patient.getIdPatient(), patient);
         users.put(patient.getUname(), patient);
     }
-    
+
     public void addMedicine(Medicine medicine) {
         medicines.put(medicine.getIdMedicine(), medicine);
     }
-    
+
     public void addAppointment(Appointment appointment) {
         appointments.add(appointment);
+
+        appointment.getDoctorSchedule().addAppointment(appointment);
         poliQueue.offer(appointment);
+
         appointment.getPatient().addAppointmentHistory(appointment);
         appointment.getDoctor().addAppointment(appointment);
     }
 
-    
     public void addMedicalRecord(MedicalRecord record, Patient patient) {
         medicalRecords.add(record);
         patient.addMedicalRecord(record);
     }
-    
+
     public void addPharmacyQueue(Prescription prescription) {
         pharmacyQueue.offer(prescription);
     }
@@ -1893,6 +1808,5 @@ public void deleteDoctorScheduleMenu(Doctor doctor) {
     public void addEmergencyCase(EmergencyCase emergencyCase) {
         emergencyQueue.offer(emergencyCase);
     }
-    
-}
 
+}

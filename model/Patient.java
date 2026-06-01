@@ -6,7 +6,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Patient extends User{
+public class Patient extends User {
     private String idPatient;
     private String fullname;
     private String nik;
@@ -16,7 +16,8 @@ public class Patient extends User{
     private ArrayList<MedicalRecord> medicalRecords;
     private ArrayList<Prescription> prescriptions;
 
-    public Patient (String idUser, String username, String password, String idPatient, String fullname, String nik, String telepon) {
+    public Patient(String idUser, String username, String password, String idPatient, String fullname, String nik,
+            String telepon) {
         super(idUser, username, password, Role.PATIENT);
         this.idPatient = idPatient;
         this.fullname = fullname;
@@ -44,7 +45,6 @@ public class Patient extends User{
         return telepon;
     }
 
-
     public LocalDateTime getRegistDateTime() {
         return registDateTime;
     }
@@ -52,6 +52,7 @@ public class Patient extends User{
     public ArrayList<Appointment> getAppointmentHistory() {
         return appointmentHistory;
     }
+
     public void addAppointmentHistory(Appointment appointment) {
         appointmentHistory.add(appointment);
     }
@@ -68,19 +69,11 @@ public class Patient extends User{
         prescriptions.add(prescription);
     }
 
-
-    public Appointment creatAppointment(Doctor doctor, String complaint) {
-        Appointment appointment = new Appointment("AP" + System.currentTimeMillis(), doctor, this, LocalDate.now(), LocalTime.now(), complaint);
-        appointmentHistory.add(appointment);
-        doctor.addAppointment(appointment);
-        return appointment;
-    }
-
     public boolean cancelAppointment(Appointment appointment) {
-        if(appointmentHistory.contains(appointment)) {
+        if (appointmentHistory.contains(appointment)) {
             appointment.cancelAppointment();
             return true;
-        } 
+        }
         return false;
     }
 
@@ -116,7 +109,7 @@ public class Patient extends User{
     @Override
     public void showDetail() {
         System.out.println();
-        System.out.println( "Patient ID: " + idPatient +
+        System.out.println("Patient ID: " + idPatient +
                 "\nName: " + fullname +
                 "\nNIK: " + nik +
                 "\nTelepon: " + telepon +
