@@ -77,13 +77,11 @@ public class Patient extends User {
         return false;
     }
 
-    public Prescription buyMedicine(HashMap<Medicine, Integer> meds) {
-        Prescription prescription = new Prescription("PR" + System.currentTimeMillis(), this, null);
-
+    public Prescription buyMedicine(HashMap<Medicine, Integer> meds, String idPrescription) {
+        Prescription prescription = new Prescription(idPrescription, this, null);
         for (Medicine medicine : meds.keySet()) {
             prescription.addMedicine(medicine, meds.get(medicine));
         }
-
         return prescription;
     }
 
@@ -92,7 +90,6 @@ public class Patient extends User {
             System.out.println("Belum ada riwayat appointment");
             return;
         }
-
         for (Appointment appointment : appointmentHistory) {
             appointment.showDetail();
         }

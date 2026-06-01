@@ -13,6 +13,7 @@ public class PoliSystem {
     private HashMap<String, Doctor> doctors;
     private HashMap<String, Patient> patients;
     private HashMap<String, Medicine> medicines;
+    private HashMap<String, Pharmacist> pharmacists;
 
     private ArrayList<Appointment> appointments;
     private ArrayList<MedicalRecord> medicalRecords;
@@ -21,11 +22,13 @@ public class PoliSystem {
     private Queue<Prescription> pharmacyQueue;
     private PriorityQueue<EmergencyCase> emergencyQueue;
     private HashMap<String, Appointment> currentPatient;
+    private int medicineOrderCounter = 1;
 
     public PoliSystem() {
         users = new HashMap<>();
         doctors = new HashMap<>();
         patients = new HashMap<>();
+        pharmacists = new HashMap<>();
         medicines = new HashMap<>();
         appointments = new ArrayList<>();
         medicalRecords = new ArrayList<>();
@@ -79,6 +82,8 @@ public class PoliSystem {
                         UserDoctor((Doctor) user);
                     } else if (user.getRole() == Role.PATIENT) {
                         UserPatient((Patient) user);
+                    } else if (user.getRole() == Role.PHARMACIST) {
+                        userPharmacist((Pharmacist) user);
                     }
                     break;
 
@@ -146,10 +151,10 @@ public class PoliSystem {
         do {
             System.out.println();
             System.out.println("=== ADMIN MENU ====");
-            System.out.println("1. Kelola Dokter");
-            System.out.println("2. Kelola Obat");
-            System.out.println("3. Kelola Pasien");
-            System.out.println("4. Lihat Jadwal Appointment");
+            System.out.println("1. Manage Doctor");
+            System.out.println("2. Manage Medicne");
+            System.out.println("3. Manage Patient");
+            System.out.println("4. View Appointment Schedule");
             System.out.println("5. IGD");
             System.out.println("6. Logout");
             System.out.print("Input: ");
@@ -444,7 +449,7 @@ public class PoliSystem {
                     deleteMedicineMenu();
                     break;
                 case 4:
-                    UserAdmin();
+                    return;
                 default:
                     System.out.println("Please input from 1-4");
                     medicineMenu();
@@ -1316,6 +1321,7 @@ public class PoliSystem {
             System.out.println("No medicine added.");
             return null;
         }
+        selectedPatient.addPrescription(prescription);
         addPharmacyQueue(prescription);
         System.out.println();
         System.out.println("Prescription created.");
@@ -1665,11 +1671,15 @@ public class PoliSystem {
             System.out.println("You don't have any active appointment.");
             return;
         }
-        myAppointments.sort(Comparator.comparing(Appointment::appointmentDate).thenComparing(Appointment::getAppointmentTime));
 
+        ArrayList<DoctorSchedule> displayedSchedules = new ArrayList<>();
         for (Appointment myAppointment : myAppointments) {
-            Doctor doctor = myAppointment.getDoctor();
             DoctorSchedule schedule = myAppointment.getDoctorSchedule();
+            if (displayedSchedules.contains(schedule)) {
+                continue;
+            }
+            displayedSchedules.add(schedule);
+            Doctor doctor = myAppointment.getDoctor();
             ArrayList<Appointment> sortedQueue = new ArrayList<>(schedule.getAppointmentQueue());
             sortedQueue.removeIf(a -> a.getAppointmentStatus() != AppointmentStatus.PENDING);
             sortedQueue.sort(Comparator.comparing(Appointment::getAppointmentTime));
@@ -1690,11 +1700,16 @@ public class PoliSystem {
                 System.out.println(no + ". " + appointment.getAppointmentTime() + " | " + appointment.getPatient().getFullName() + mark);
                 no++;
             }
-
-            int position = sortedQueue.indexOf(myAppointment) +1;
             System.out.println();
-            System.out.println("Your Queue Number : " + position);
-            System.out.println("Your Appointment  : " + myAppointment.getAppointmentTime());
+
+            for (Appointment appointment : sortedQueue) {
+                if (appointment.getPatient().getIdPatient().equals(patient.getIdPatient())) {
+                    int position = sortedQueue.indexOf(appointment) + 1;
+                    System.out.println("Your Queue Number : " + position);
+                    System.out.println("Your Appointment  : " + appointment.getAppointmentTime());
+                    System.out.println();
+                }
+            }
         }
     }
 
@@ -1709,57 +1724,33 @@ public class PoliSystem {
         }
 
         int no = 1;
-        int myPosition = 0;
+        ArrayList<Integer> myPositions = new ArrayList<>();
         for (Prescription prescription : pharmacyQueue) {
             String mark = "";
             if (prescription.getPatient().getIdPatient().equals(patient.getIdPatient())) {
                 mark = " <-- YOU";
-                myPosition = no;
+                myPositions.add(no);
             }
             System.out.println(no + ". " + prescription.getPatient().getFullName() + " | Prescription ID: " + prescription.getIdPrescription() + mark);
             no++;
         }
 
-        if (myPosition == 0) {
+        if (myPositions.isEmpty()) {
             System.out.println();
             System.out.println("You don't have any active pharmacy queue.");
         } else {
-            System.out.println();
-            System.out.println("Your Pharmacy Queue Number : " + myPosition);
+            for (int pos : myPositions) {
+                System.out.println();
+                System.out.println("Your Pharmacy Queue Number : " + pos);
+            }
         }
     }
 
 
 
     public void buyMedicine(Patient patient) {
-        int input = 0;
-        do {
-            System.out.println();
-            System.out.println("=== BUY MEDICINE ===");
-            System.out.println("1. Buy Medicine");
-            System.out.println("2. Redeem Prescription");
-            System.out.println("3. Back");
-            System.out.print("Input: ");
-            input = scan.nextInt();
-            scan.nextLine();
-            switch (input) {
-                case 1:
-                    buyNonControlledMedicine(patient);
-                    break;
-                case 2:
-                    redeemPrescription(patient);
-                    break;
-                case 3:
-                    return;
-                default:
-                    System.out.println("Invalid input.");
-            }
-        } while (input != 3);
-    }
-
-
-
-    public void buyNonControlledMedicine(Patient patient) {
+        System.out.println();
+        System.out.println("=== BUY MEDICINE ===");
         ArrayList<Medicine> availableMedicines = new ArrayList<>();
         for (Medicine medicine : medicines.values()) {
             if (!medicine.isControlled()) {
@@ -1770,10 +1761,8 @@ public class PoliSystem {
             System.out.println("No medicine available.");
             return;
         }
-
+    
         HashMap<Medicine, Integer> cart = new HashMap<>();
-        System.out.println();
-        System.out.println("=== NON-CONTROLLED MEDICINES ===");
         for (int i = 0; i < availableMedicines.size(); i++) {
             Medicine med = availableMedicines.get(i);
             System.out.println((i + 1) + ". " + med.getMedName() + " | Rp" + med.getPrice());
@@ -1800,7 +1789,7 @@ public class PoliSystem {
             System.out.println("No medicine selected.");
             return;
         }
-
+    
         int total = 0;
         System.out.println();
         System.out.println("=== PURCHASE SUMMARY ===");
@@ -1812,67 +1801,147 @@ public class PoliSystem {
         }
         System.out.println("--------------------");
         System.out.println("Total : Rp" + total);
-        System.out.println("Purchase successful.");
+        String idPrescription = "PRM" + String.format("%03d", medicineOrderCounter++);
+        Prescription purchase = patient.buyMedicine(cart, idPrescription);
+        patient.addPrescription(purchase);
+        addPharmacyQueue(purchase);
+        System.out.println("Order added to pharmacy queue.");
+        System.out.println("Please wait for pharmacist confirmation.");
+        
+
     }
 
 
 
-    public void redeemPrescription(Patient patient) {
-        ArrayList<Prescription> availablePrescriptions = new ArrayList<>();
-        for (Prescription prescription : patient.getPrescriptions()) {
-            if (!prescription.isCompleted()) {
-                availablePrescriptions.add(prescription);
-            }
-        }
-        if (availablePrescriptions.isEmpty()) {
-            System.out.println("No prescription available.");
-            return;
-        }
+    // public void redeemPrescription(Patient patient) {
+    //     ArrayList<Prescription> availablePrescriptions = new ArrayList<>();
+    //     for (Prescription prescription : patient.getPrescriptions()) {
+    //         if (!prescription.isCompleted()) {
+    //             availablePrescriptions.add(prescription);
+    //         }
+    //     }
+    //     if (availablePrescriptions.isEmpty()) {
+    //         System.out.println("No prescription available.");
+    //         return;
+    //     }
 
-        System.out.println();
-        System.out.println("=== PRESCRIPTIONS ===");
-        for (int i = 0; i < availablePrescriptions.size(); i++) {
-            Prescription prescription = availablePrescriptions.get(i);
-            System.out.println((i + 1) + ". Prescription ID: " + prescription.getIdPrescription());
-            int total = 0;
-            for (Medicine medicine : prescription.getMedicines().keySet()) {
-                int qty = prescription.getMedicines().get(medicine);
-                System.out.println("   - " + medicine.getMedName() + " x " + qty);
-                total += qty * medicine.getPrice();
-            }
-            System.out.println("   Total : Rp" + total);
+    //     System.out.println();
+    //     System.out.println("=== PRESCRIPTIONS ===");
+    //     for (int i = 0; i < availablePrescriptions.size(); i++) {
+    //         Prescription prescription = availablePrescriptions.get(i);
+    //         System.out.println((i + 1) + ". Prescription ID: " + prescription.getIdPrescription());
+    //         int total = 0;
+    //         for (Medicine medicine : prescription.getMedicines().keySet()) {
+    //             int qty = prescription.getMedicines().get(medicine);
+    //             System.out.println("   - " + medicine.getMedName() + " x " + qty);
+    //             total += qty * medicine.getPrice();
+    //         }
+    //         System.out.println("   Total : Rp" + total);
+    //         System.out.println();
+    //     }
+
+    //     System.out.print("Choose prescription: ");
+    //     int choice = scan.nextInt();
+    //     scan.nextLine();
+    //     if (choice < 1 || choice > availablePrescriptions.size()) {
+    //         System.out.println("Invalid choice.");
+    //         return;
+    //     }
+    //     Prescription selectedPrescription = availablePrescriptions.get(choice - 1);
+    //     int total = 0;
+    //     for (Medicine medicine : selectedPrescription.getMedicines().keySet()) {
+    //         int qty = selectedPrescription.getMedicines().get(medicine);
+    //         total += qty * medicine.getPrice();
+    //     }
+
+    //     System.out.println();
+    //     System.out.println("Prescription redeemed.");
+    //     System.out.println("Total Payment : Rp" + total);
+    //     selectedPrescription.setCompleted(true);
+    //     pharmacyQueue.remove(selectedPrescription);
+    // }
+
+
+
+
+
+
+
+
+
+    public void userPharmacist(Pharmacist pharmacist){
+        int input;
+        do {
             System.out.println();
-        }
+            System.out.println("=== PHARMACIST MENU ===");
+            System.out.println("Hello, " + pharmacist.getFullName());
+            System.out.println("1. View Queue");
+            System.out.println("2. Complete Order");
+            System.out.println("3. Manage Medicine");
+            System.out.println("4. Logout");
+            System.out.print("Input: ");
+            input = scan.nextInt();
+            scan.nextLine();
+            System.out.println();
 
-        System.out.print("Choose prescription: ");
-        int choice = scan.nextInt();
-        scan.nextLine();
-        if (choice < 1 || choice > availablePrescriptions.size()) {
-            System.out.println("Invalid choice.");
-            return;
-        }
-        Prescription selectedPrescription = availablePrescriptions.get(choice - 1);
-        int total = 0;
-        for (Medicine medicine : selectedPrescription.getMedicines().keySet()) {
-            int qty = selectedPrescription.getMedicines().get(medicine);
-            total += qty * medicine.getPrice();
-        }
-
-        System.out.println();
-        System.out.println("Prescription redeemed.");
-        System.out.println("Total Payment : Rp" + total);
-        selectedPrescription.setCompleted(true);
-        pharmacyQueue.remove(selectedPrescription);
+            switch (input) {
+                case 1:
+                    viewPharmacyQueue();
+                    break;
+                case 2:
+                    completePharmacyOrder();
+                    break;
+                case 3:
+                    medicineMenu();
+                    break;
+                case 4:
+                    start();
+                    break;
+                default:
+                    System.out.println("Menu not available.");
+                    break;
+            }
+        } while (input != 4);
     }
 
 
 
+    public void viewPharmacyQueue() {
+        System.out.println();
+        System.out.println("=== PHARMACY QUEUE ===");
+        if (pharmacyQueue.isEmpty()) {
+            System.out.println("No queue available.");
+            return;
+        }
+
+        int no = 1;
+        for (Prescription prescription : pharmacyQueue) {
+            System.out.println(no + ". " + prescription.getPatient().getFullName() + " | " + prescription.getIdPrescription());
+            no++;
+        }
+    }
 
 
 
+    public void completePharmacyOrder() {
+        if (pharmacyQueue.isEmpty()) {
+            System.out.println("No pharmacy queue.");
+            return;
+        }
 
+        Prescription prescription =pharmacyQueue.peek();
+        System.out.println();
+        System.out.println("=== CURRENT ORDER ===");
+        prescription.showDetail();
+        System.out.print("Complete this order? (y/n): ");
+        String confirm = scan.nextLine();
 
-
+        if (confirm.equalsIgnoreCase("y")) {
+            prescription.setCompleted(true);
+            pharmacyQueue.poll();
+            System.out.println("Order completed successfully.");
+        }
+    }
 
 
 
@@ -1963,15 +2032,18 @@ public class PoliSystem {
         users.put(patient.getUname(), patient);
     }
 
+    public void addPharmacist(Pharmacist pharmacist) {
+        pharmacists.put(pharmacist.getIdPharmacist(), pharmacist);
+        users.put(pharmacist.getUname(), pharmacist);
+    }
+
     public void addMedicine(Medicine medicine) {
         medicines.put(medicine.getIdMedicine(), medicine);
     }
 
     public void addAppointment(Appointment appointment) {
         appointments.add(appointment);
-
         appointment.getDoctorSchedule().addAppointment(appointment);
-
         appointment.getPatient().addAppointmentHistory(appointment);
         appointment.getDoctor().addAppointment(appointment);
     }
