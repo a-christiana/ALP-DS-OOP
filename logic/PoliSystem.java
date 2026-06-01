@@ -1333,7 +1333,7 @@ public class PoliSystem {
                     UserPatient(patient);
                     break;
             }
-        } while (input != 9);
+        } while (input != 10);
     }
 
     public void makeAppointment(Patient patient) {
