@@ -142,6 +142,11 @@ public class DummyData {
         d3.addSchedule(new DoctorSchedule(LocalDate.now().plusDays(1), LocalTime.of(10, 0), LocalTime.of(14, 0)));
         d4.addSchedule(new DoctorSchedule(LocalDate.now().plusDays(2), LocalTime.of(8, 0), LocalTime.of(11, 0)));
         d5.addSchedule(new DoctorSchedule(LocalDate.now().plusDays(1), LocalTime.of(7, 0), LocalTime.of(15, 0)));
+        d6.addSchedule(new DoctorSchedule(LocalDate.now().plusDays(2), LocalTime.of(9, 0), LocalTime.of(12, 0)));
+        d7.addSchedule(new DoctorSchedule(LocalDate.now().plusDays(1), LocalTime.of(13, 0), LocalTime.of(16, 0)));
+        d8.addSchedule(new DoctorSchedule(LocalDate.now().plusDays(2), LocalTime.of(10, 0), LocalTime.of(14, 0)));
+        d9.addSchedule(new DoctorSchedule(LocalDate.now().plusDays(1), LocalTime.of(8, 0), LocalTime.of(11, 0)));
+        d10.addSchedule(new DoctorSchedule(LocalDate.now().plusDays(2), LocalTime.of(14, 0), LocalTime.of(17, 0)));
 
         DoctorSchedule s1 = d1.getDoctorSchedules().get(0);
         DoctorSchedule s2 = d2.getDoctorSchedules().get(0);

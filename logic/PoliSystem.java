@@ -1344,6 +1344,8 @@ public class PoliSystem {
         }
 
         ArrayList<Doctor> doctorList = new ArrayList<>(doctors.values());
+
+        doctorList.sort((dA, dB) -> dA.getIdDoctor().compareTo(dB.getIdDoctor()));
         for (int i = 0; i < doctorList.size(); i++) {
             Doctor doctor = doctorList.get(i);
             System.out.println((i + 1) + ". " + doctor.getFullName() + " - " + doctor.getSpecialization());
@@ -1492,48 +1494,48 @@ public class PoliSystem {
     }
 
     public void showHospitalQueue(Patient patient) {
-    System.out.println();
-    System.out.println("=== HOSPITAL QUEUE BY DOCTOR SCHEDULE ===");
+        System.out.println();
+        System.out.println("=== HOSPITAL QUEUE BY DOCTOR SCHEDULE ===");
 
-    boolean hasQueue = false;
+        boolean hasQueue = false;
 
-    for (Doctor doctor : doctors.values()) {
-        for (DoctorSchedule schedule : doctor.getDoctorSchedules()) {
-            Queue<Appointment> queue = schedule.getAppointmentQueue();
+        for (Doctor doctor : doctors.values()) {
+            for (DoctorSchedule schedule : doctor.getDoctorSchedules()) {
+                Queue<Appointment> queue = schedule.getAppointmentQueue();
 
-            if (!queue.isEmpty()) {
-                hasQueue = true;
+                if (!queue.isEmpty()) {
+                    hasQueue = true;
 
-                System.out.println();
-                System.out.println("Doctor : " + doctor.getFullName());
-                System.out.println("Date   : " + schedule.getDate());
-                System.out.println("Time   : " + schedule.getStartTime() + " - " + schedule.getEndTime());
-                System.out.println("Slot   : " + queue.size() + "/" + schedule.getMaxPatient());
-                System.out.println("--------------------------------");
+                    System.out.println();
+                    System.out.println("Doctor : " + doctor.getFullName());
+                    System.out.println("Date   : " + schedule.getDate());
+                    System.out.println("Time   : " + schedule.getStartTime() + " - " + schedule.getEndTime());
+                    System.out.println("Slot   : " + queue.size() + "/" + schedule.getMaxPatient());
+                    System.out.println("--------------------------------");
 
-                int no = 1;
-                for (Appointment appointment : queue) {
-                    String mark = "";
+                    int no = 1;
+                    for (Appointment appointment : queue) {
+                        String mark = "";
 
-                    if (appointment.getPatient().getIdPatient().equals(patient.getIdPatient())) {
-                        mark = " <-- YOU";
+                        if (appointment.getPatient().getIdPatient().equals(patient.getIdPatient())) {
+                            mark = " <-- YOU";
+                        }
+
+                        System.out.println(no + ". "
+                                + appointment.getAppointmentTime()
+                                + " | "
+                                + appointment.getPatient().getFullName()
+                                + mark);
+                        no++;
                     }
-
-                    System.out.println(no + ". "
-                            + appointment.getAppointmentTime()
-                            + " | "
-                            + appointment.getPatient().getFullName()
-                            + mark);
-                    no++;
                 }
             }
         }
-    }
 
-    if (!hasQueue) {
-        System.out.println("No queue available.");
+        if (!hasQueue) {
+            System.out.println("No queue available.");
+        }
     }
-}
 
     public void showMyQueue(Patient patient) {
         ArrayList<Appointment> myAppointments = new ArrayList<>();
