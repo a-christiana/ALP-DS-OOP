@@ -6,9 +6,9 @@ import java.time.LocalTime;
 public class Appointment {
     private static int nextQueueNumber = 1;
     private String idAppointment;
-    Patient patient;
-    Doctor doctor;
-    LocalDate appointmentDate;
+    private Patient patient;
+    private Doctor doctor;
+    private LocalDate appointmentDate;
     private AppointmentStatus status;
     private int queueNumber;
     private LocalTime appointmentTime;
