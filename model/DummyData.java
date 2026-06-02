@@ -126,13 +126,13 @@ public class DummyData {
 
                 MedicalRecord mr1 = new MedicalRecord("MR001", p1, d10, "Pusing, demam, dan nyeri otot", "Influenza",
                         "Pemberian obat penurun demam dan istirahat cukup", pr1);
-                MedicalRecord mr2 = new MedicalRecord("MR002", p2, d8, "Gatal dan bentol merah pada tangan dan leher",
+                MedicalRecord mr2 = new MedicalRecord("MR001", p2, d8, "Gatal dan bentol merah pada tangan dan leher",
                         "Gatal dan bentol merah pada tangan dan leher", "Pemberian antihistamin dan salep anti inflamasi", pr2);
-                MedicalRecord mr3 = new MedicalRecord("MR003", p3, d5, "Nyeri gigi bagian belakang dan gusi bengkak",
+                MedicalRecord mr3 = new MedicalRecord("MR001", p3, d5, "Nyeri gigi bagian belakang dan gusi bengkak",
                         "Karies gigi dan radang gusi", "Pembersihan karang gigi dan pemberian antibiotik", pr3);
-                MedicalRecord mr4 = new MedicalRecord("MR004", p4, d4, "Demam tinggi, batuk, dan nafsu makan menurun",
+                MedicalRecord mr4 = new MedicalRecord("MR001", p4, d4, "Demam tinggi, batuk, dan nafsu makan menurun",
                         "Infeksi Saluran Pernapasan Atas pada anak", "Pemberian sirup penurun demam dan vitamin anak", pr4);
-                MedicalRecord mr5 = new MedicalRecord("MR005", p5, d1, "Nyeri dada ringan dan sesak napas saat aktivitas berat",
+                MedicalRecord mr5 = new MedicalRecord("MR001", p5, d1, "Nyeri dada ringan dan sesak napas saat aktivitas berat",
                         "Hipertensi dan angina ringan",
                         "Pemberian obat penurun tekanan darah dan anjuran mengurangi aktivitas berat", pr5);
 
