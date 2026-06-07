@@ -93,10 +93,6 @@ public class Patient extends User {
         }
     }
 
-    public void addAppointment(Appointment appointment) {
-        appointmentHistory.add(appointment);
-    }
-
     public void addMedicalRecord(MedicalRecord record) {
         medicalRecords.add(record);
     }

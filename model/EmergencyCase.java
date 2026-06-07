@@ -9,7 +9,6 @@ public class EmergencyCase {
     private String complaint;
     private TriageLevel triageLevel;
     private LocalDateTime arrivalTime;
-    private AppointmentStatus status;
 
     public EmergencyCase(String emergencyId, Patient patient, String complaint) {
         this.emergencyId = emergencyId;
@@ -17,7 +16,6 @@ public class EmergencyCase {
         this.complaint = complaint;
         this.triageLevel = TriageSystem.determineTriage(complaint);
         this.arrivalTime = LocalDateTime.now();
-        this.status = AppointmentStatus.PENDING;
     }
 
     public Patient getPatient() {
@@ -38,6 +36,5 @@ public class EmergencyCase {
         System.out.println("Complaint: " + complaint);
         System.out.println("Triage: " + triageLevel);
         System.out.println("Arrival: " + arrivalTime);
-        System.out.println("Status: " + status);
     }
 }

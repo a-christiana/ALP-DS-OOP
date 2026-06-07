@@ -7,7 +7,6 @@ public class Doctor extends User{
     private String fullName;
     private String phoneNumber;
     private String specialization;
-    private boolean available;
     private Queue<Appointment> appointments;
     private ArrayList<DoctorSchedule> doctorSchedules;
     
@@ -18,7 +17,6 @@ public class Doctor extends User{
         this.fullName = fullName;
         this.phoneNumber = phoneNumber;
         this.specialization = specialization;
-        this.available = true;
         this.appointments = new LinkedList<>();
         this.doctorSchedules = new ArrayList<>();
     }
@@ -37,10 +35,6 @@ public class Doctor extends User{
     
     public String getSpecialization() {
         return specialization;
-    }
-    
-    public boolean isAvalaible() {
-        return available;
     }
     
     public ArrayList<DoctorSchedule> getDoctorSchedules() {
@@ -75,10 +69,6 @@ public class Doctor extends User{
         for (Appointment appointment : appointments) {
             appointment.showDetail();
         }
-    }
-
-    public String makeDiagnose(Patient patient) {
-        return "Diagnosis Pasien: " + patient.getUname();
     }
 
 

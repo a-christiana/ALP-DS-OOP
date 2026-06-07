@@ -50,9 +50,5 @@ public class Medicine {
         return price;
     }
 
-    public void setIdMedicine(String idMedicine) {
-        this.idMedicine = idMedicine;
-    }
-
     
 }

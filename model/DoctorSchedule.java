@@ -57,15 +57,6 @@ public class DoctorSchedule {
         return getBookedSlot() >= getMaxPatient();
     }
 
-    public boolean isTimeAvailable(LocalTime time) {
-        for (Appointment appointment : appointmentQueue) {
-            if (appointment.getAppointmentStatus() != AppointmentStatus.CANCELED && appointment.getAppointmentTime().equals(time)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
 
     public LocalTime getNextAvailableTime() {
         if (isFull()) {
@@ -82,15 +73,6 @@ public class DoctorSchedule {
         return true;
     }
 
-    public Appointment callNextPatient() {
-        for(Appointment appointment : appointmentQueue){
-            if(appointment.getAppointmentStatus() == AppointmentStatus.PENDING){
-                appointment.completeAppointment();
-                return appointment;
-            }
-        }
-        return null;
-    }
 
     public Appointment getNextPendingAppointment() {
         ArrayList<Appointment> sortedQueue = new ArrayList<>(appointmentQueue);
@@ -101,18 +83,6 @@ public class DoctorSchedule {
             }
         }
         return null;
-    }
-
-    public void showQueue() {
-        if (appointmentQueue.isEmpty()) {
-            System.out.println("No queue available.");
-            return;
-        }
-        int no = 1;
-        for (Appointment appointment : appointmentQueue) {
-            System.out.println(no + ". " + appointment.getAppointmentTime() + " | " + appointment.getPatient().getFullName() + " | " + appointment.getComplain());
-            no++;
-        }
     }
 
     public void showDetail() {

@@ -1,7 +1,6 @@
 package model;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 public class MedicalRecord {
     private String idMedicalRecords;
@@ -44,7 +43,4 @@ public class MedicalRecord {
         System.out.println("----------------------");
     }
 
-    public static ArrayList<MedicalRecord> getHistory(Patient patient) {
-        return patient.getMedicalRecords();
-    }
 }

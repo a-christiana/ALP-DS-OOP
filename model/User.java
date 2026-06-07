@@ -36,14 +36,6 @@ public abstract class User {
         return role;
     }
 
-    public boolean logout() {
-        System.out.println("Logout Success.");
-        return false;
-    }
-
     public abstract void showDetail();
 
-    public boolean isAdmin() {
-        return role == Role.ADMIN;
-    }
 }

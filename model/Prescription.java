@@ -32,10 +32,7 @@ public class Prescription {
     public HashMap<Medicine, Integer> getMedicines() {
         return medicines;
     }
-    
-    public boolean isCompleted() {
-        return completed;
-    }
+
     
     public void setCompleted(boolean completed) {
         this.completed = completed;
@@ -45,20 +42,15 @@ public class Prescription {
         medicines.put(medicine, qty);
     }
     
-    public double total() {
-        double total = 0;
-
+    public int total() {
+        int total = 0;
         for (Medicine medicine : medicines.keySet()) {
             total += medicine.getPrice() * medicines.get(medicine);
         }
-
         return total;
     }
 
-    public boolean updateStatus() {
-        completed = true;
-        return completed;
-    }
+
 
     public boolean validateMedicinePurchase() {
         for (Medicine medicine : medicines.keySet()) {
@@ -66,7 +58,6 @@ public class Prescription {
                 return false;
             }
         }
-
         return true;
     }
 

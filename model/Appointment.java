@@ -4,13 +4,11 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class Appointment {
-    private static int nextQueueNumber = 1;
     private String idAppointment;
     private Patient patient;
     private Doctor doctor;
     private LocalDate appointmentDate;
     private AppointmentStatus status;
-    private int queueNumber;
     private LocalTime appointmentTime;
     private String complain;
     private DoctorSchedule doctorSchedule;
@@ -24,7 +22,6 @@ public class Appointment {
         this.appointmentDate = doctorSchedule.getDate();
         this.appointmentTime = appointmentTime;
         this.status = AppointmentStatus.PENDING;
-        this.queueNumber = nextQueueNumber++;
         this.complain = complain;
     }
 
@@ -46,10 +43,6 @@ public class Appointment {
 
     public LocalDate appointmentDate() {
         return appointmentDate;
-    }
-
-    public int getQueueNumber() {
-        return queueNumber;
     }
 
     public LocalTime getAppointmentTime() {
@@ -85,13 +78,5 @@ public class Appointment {
         System.out.println("Time: " + appointmentTime);
         System.out.println("Complain: " + complain);
         System.out.println("Status: " + status);
-    }
-
-    @Override
-    public String toString() {
-        return "Queue " + queueNumber +
-                " | Patient: " + patient.getFullName() +
-                " | Doctor: " + doctor.getFullName() +
-                " | Status: " + status;
     }
 }
