@@ -1856,7 +1856,7 @@ public class PoliSystem {
         System.out.print("Input Prescription ID: ");
         String id = scan.nextLine();
         if (!id.startsWith("PRM")) {
-            System.out.println("Only PRM orders can be cancelled.");
+            System.out.println("Doctor's Prescription orders can't be cancelled.");
             return;
         }
         Prescription target = null;
