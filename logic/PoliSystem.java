@@ -1421,6 +1421,7 @@ public class PoliSystem {
                     System.out.println();
                     System.out.println("=== PROFILE ===");
                     patient.showDetail();
+                    viewMedicalRecordsByPatient(patient);
                     break;
 
                 case 11:
@@ -1813,15 +1814,14 @@ public class PoliSystem {
         System.out.println("Order added to pharmacy queue.");
         System.out.println("Please wait for pharmacist confirmation.");
         
-
     }
+
+
 
     public void viewMyOrder(Patient patient) {
         System.out.println();
         System.out.println("=== MY ACTIVE ORDERS ===");
-
         boolean found = false;
-
         for (Prescription prescription : pharmacyQueue) {
             if (prescription.getPatient() == patient && !prescription.isCompleted()) {
                 prescription.showDetail();
@@ -1829,7 +1829,6 @@ public class PoliSystem {
                 found = true;
             }
         }
-
         if (!found) {
             System.out.println("No active orders.");
             return;
@@ -1838,46 +1837,35 @@ public class PoliSystem {
         System.out.println("1. Cancel Order");
         System.out.println("2. Back");
         System.out.print("Input: ");
-
         int choice = scan.nextInt();
         scan.nextLine();
-
         switch (choice) {
             case 1:
                 cancelMyOrder(patient);
                 break;
-
             case 2:
                 return;
-
             default:
                 System.out.println("Invalid menu.");
         }
     }
 
-    public void cancelMyOrder(Patient patient) {
 
+
+    public void cancelMyOrder(Patient patient) {
         System.out.print("Input Prescription ID: ");
         String id = scan.nextLine();
-
         if (!id.startsWith("PRM")) {
             System.out.println("Only PRM orders can be cancelled.");
             return;
         }
-
         Prescription target = null;
-
         for (Prescription prescription : pharmacyQueue) {
-
-            if (prescription.getIdPrescription().equalsIgnoreCase(id)
-                    && prescription.getPatient() == patient
-                    && !prescription.isCompleted()) {
-
+            if (prescription.getIdPrescription().equalsIgnoreCase(id) && prescription.getPatient() == patient && !prescription.isCompleted()) {
                 target = prescription;
                 break;
             }
         }
-
         if (target == null) {
             System.out.println("Order not found.");
             return;
@@ -1887,10 +1875,11 @@ public class PoliSystem {
         System.out.println("Queue number 1 cannot be cancelled.");
         return;
         }
-
         pharmacyQueue.remove(target);
         System.out.println("Order cancelled successfully.");
     }
+
+
 
     // public void redeemPrescription(Patient patient) {
     //     ArrayList<Prescription> availablePrescriptions = new ArrayList<>();
