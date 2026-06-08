@@ -37,6 +37,10 @@ public class Prescription {
     public void setCompleted(boolean completed) {
         this.completed = completed;
     }
+
+    public boolean isCompleted() {
+        return completed;
+    }
     
     public void addMedicine(Medicine medicine, int qty) {
         medicines.put(medicine, qty);
