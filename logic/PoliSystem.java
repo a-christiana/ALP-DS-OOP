@@ -972,162 +972,6 @@ public class PoliSystem {
     }
 
 
-    
-    // public void selectPatientDoc(Doctor activeDoctor) {
-    //     int inp;
-    //     do {
-    //         System.out.println();
-    //         System.out.println("=== SELECT PATIENT ===");
-    //         System.out.println("1. View Patient List");
-    //         System.out.println("2. Search Patient by ID or Name");
-    //         System.out.println("3. Back");
-    //         System.out.print("Input: ");
-    //         inp = scan.nextInt();
-    //         scan.nextLine();
-    //         Patient selectedPatient = null;
-
-    //         switch (inp) {
-    //             case 1:
-    //                 selectedPatient = choosePatientFromListDoc(activeDoctor);
-    //                 break;
-    //             case 2:
-    //                 selectedPatient = searchPatientByIdOrNameDoc(activeDoctor);
-    //                 break;
-    //             case 3:
-    //                 UserDoctor(activeDoctor);
-    //             default:
-    //                 System.out.println("Please input from 1-3");
-    //                 selectPatientDoc(activeDoctor);
-    //         }
-
-    //         if (selectedPatient != null) {
-    //             selectedPatientActionMenuDoc(activeDoctor, selectedPatient);
-    //         }
-    //         System.out.println();
-    //     } while (inp != 3);
-    // }
-
-
-
-    // public Patient choosePatientFromListDoc(Doctor doctor) {
-    //     nowChecking(doctor);
-    //     ArrayList<Patient> patientList = new ArrayList<>();
-    //     for (Appointment appointment : appointments) {
-    //         if (appointment.getDoctor().getIdDoctor().equals(doctor.getIdDoctor())) {
-    //             Patient patient = appointment.getPatient();
-    //             if (!patientList.contains(patient)) {
-    //                 patientList.add(patient);
-    //             }
-    //         }
-    //     }
-
-    //     if (patientList.isEmpty()) {
-    //         System.out.println("No patient found.");
-    //         return null;
-    //     }
-
-    //     System.out.println();
-    //     System.out.println("=== PATIENT LIST ===");
-    //     for (int i = 0; i < patientList.size(); i++) {
-    //         Patient patient = patientList.get(i);
-    //         System.out.println((i + 1) + ". " + patient.getIdPatient() + " | " + patient.getFullName());
-    //     }
-    //     System.out.print("Choose patient: ");
-    //     int choice = scan.nextInt();
-
-    //     if (choice < 1 || choice > patientList.size()) {
-    //         System.out.println("Invalid choice.");
-    //         return null;
-    //     }
-    //     return patientList.get(choice - 1);
-    // }
-
-
-
-    // public Patient searchPatientByIdOrNameDoc(Doctor doctor) {
-    //     nowChecking(doctor);
-    //     System.out.println();
-
-    //     System.out.print("Input patient ID or name: ");
-    //     String keyword = scan.next().toLowerCase() + scan.nextLine().toLowerCase();
-    //     ArrayList<Patient> result = new ArrayList<>();
-
-    //     for (Appointment appointment : appointments) {
-    //         if (appointment.getDoctor().getIdDoctor().equals(doctor.getIdDoctor())) {
-    //             Patient patient = appointment.getPatient();
-    //             boolean matchId = patient.getIdPatient().toLowerCase().contains(keyword);
-    //             boolean matchName = patient.getFullName().toLowerCase().contains(keyword);
-    //             if ((matchId || matchName) && !result.contains(patient)) {
-    //                 result.add(patient);
-    //             }
-    //         }
-    //     }
-
-    //     if (result.isEmpty()) {
-    //         System.out.println("Patient not found.");
-    //         return null;
-    //     }
-
-    //     System.out.println();
-    //     System.out.println("=== SEARCH RESULT ===");
-    //     for (int i = 0; i < result.size(); i++) {
-    //         Patient patient = result.get(i);
-    //         System.out.println((i + 1) + ". " + patient.getIdPatient() + " | " + patient.getFullName());
-    //     }
-    //     System.out.print("Choose patient: ");
-    //     int choice = scan.nextInt();
-    //     scan.nextLine();
-
-    //     if (choice < 1 || choice > result.size()) {
-    //         System.out.println("Invalid choice.");
-    //         return null;
-    //     }
-    //     return result.get(choice - 1);
-    // }
-
-
-
-    // public void selectedPatientActionMenuDoc(Doctor doctor, Patient patient) {
-    //     int input;
-    //     do {
-    //         System.out.println();
-    //         System.out.println("=== SELECTED PATIENT ===");
-    //         System.out.println("Patient : " + patient.getFullName());
-    //         System.out.println("1. View Medical Records");
-    //         System.out.println("2. Create Medical Record & Prescription");
-    //         System.out.println("3. Complete Appointment");
-    //         System.out.println("4. Back");
-    //         System.out.print("Input: ");
-    //         input = scan.nextInt();
-    //         scan.nextLine();
-    
-    //         switch (input) {
-    //             case 1:
-    //                 viewMedicalRecordsByPatient(patient);
-    //                 break;
-    //             case 2:
-    //                 if (!isPatientInDoctorQueue(doctor, patient)) {
-    //                     System.out.println("Patient is not in queue.");
-    //                     break;
-    //                 }
-    //                 createMedicalRecord(patient, doctor);
-    //                 break;
-    //             case 3:
-    //                 if (!isPatientInDoctorQueue(doctor, patient)) {
-    //                     System.out.println("Patient is not in queue.");
-    //                     break;
-    //                 }
-    //                 completeAppointment(doctor, patient);
-    //                 break;
-    //             case 4:
-    //                 selectPatientDoc(doctor);
-    //             default:
-    //                 System.out.println("Invalid input.");
-    //                 selectedPatientActionMenuDoc(doctor, patient);
-    //         }
-    //     } while (input != 4);
-    // }
-    
 
 
     public void nowChecking(Doctor doctor) {
@@ -1383,6 +1227,7 @@ public class PoliSystem {
             switch (input) {
                 case 1:
                     showDoctor();
+                    searchDoctorByIdOrName();
                     break;
 
                 case 2:
@@ -1435,6 +1280,38 @@ public class PoliSystem {
                     break;
             }
         } while (input != 11);
+    }
+
+
+
+    public Doctor searchDoctorByIdOrName() {
+        System.out.println();
+        System.out.print("Input doctor ID or name: ");
+        String keyword = scan.nextLine().toLowerCase();
+
+        ArrayList<Doctor> result = new ArrayList<>();
+        for (Doctor doctor : doctors.values()) {
+            boolean matchId = doctor.getIdDoctor().toLowerCase().contains(keyword);
+            boolean matchName = doctor.getFullName().toLowerCase().contains(keyword);
+            if (matchId || matchName) {
+                result.add(doctor);
+            }
+        }
+        if (result.isEmpty()) {
+            System.out.println("Dokter tidak ditemukan.");
+            return null;
+        }
+
+        result.sort((p1, p2) -> p1.getIdDoctor().compareTo(p2.getIdDoctor()));
+        System.out.println("=== SEARCH RESULT ===");
+        for (int i = 0; i < result.size(); i++) {
+            Doctor doctor = result.get(i);
+            System.out.println((i + 1) + ". "
+                    + doctor.getIdDoctor()
+                    + " | "
+                    + doctor.getFullName());
+        }
+        return result.get(0);
     }
 
 
@@ -1881,62 +1758,6 @@ public class PoliSystem {
 
 
 
-    // public void redeemPrescription(Patient patient) {
-    //     ArrayList<Prescription> availablePrescriptions = new ArrayList<>();
-    //     for (Prescription prescription : patient.getPrescriptions()) {
-    //         if (!prescription.isCompleted()) {
-    //             availablePrescriptions.add(prescription);
-    //         }
-    //     }
-    //     if (availablePrescriptions.isEmpty()) {
-    //         System.out.println("No prescription available.");
-    //         return;
-    //     }
-
-    //     System.out.println();
-    //     System.out.println("=== PRESCRIPTIONS ===");
-    //     for (int i = 0; i < availablePrescriptions.size(); i++) {
-    //         Prescription prescription = availablePrescriptions.get(i);
-    //         System.out.println((i + 1) + ". Prescription ID: " + prescription.getIdPrescription());
-    //         int total = 0;
-    //         for (Medicine medicine : prescription.getMedicines().keySet()) {
-    //             int qty = prescription.getMedicines().get(medicine);
-    //             System.out.println("   - " + medicine.getMedName() + " x " + qty);
-    //             total += qty * medicine.getPrice();
-    //         }
-    //         System.out.println("   Total : Rp" + total);
-    //         System.out.println();
-    //     }
-
-    //     System.out.print("Choose prescription: ");
-    //     int choice = scan.nextInt();
-    //     scan.nextLine();
-    //     if (choice < 1 || choice > availablePrescriptions.size()) {
-    //         System.out.println("Invalid choice.");
-    //         return;
-    //     }
-    //     Prescription selectedPrescription = availablePrescriptions.get(choice - 1);
-    //     int total = 0;
-    //     for (Medicine medicine : selectedPrescription.getMedicines().keySet()) {
-    //         int qty = selectedPrescription.getMedicines().get(medicine);
-    //         total += qty * medicine.getPrice();
-    //     }
-
-    //     System.out.println();
-    //     System.out.println("Prescription redeemed.");
-    //     System.out.println("Total Payment : Rp" + total);
-    //     selectedPrescription.setCompleted(true);
-    //     pharmacyQueue.remove(selectedPrescription);
-    // }
-
-
-
-
-
-
-
-
-
     public void userPharmacist(Pharmacist pharmacist){
         int input;
         do {
@@ -2111,6 +1932,7 @@ public class PoliSystem {
 
     public void addAppointment(Appointment appointment) {
         appointments.add(appointment);
+        poliQueue.offer(appointment);
         appointment.getDoctorSchedule().addAppointment(appointment);
         appointment.getPatient().addAppointmentHistory(appointment);
         appointment.getDoctor().addAppointment(appointment);
