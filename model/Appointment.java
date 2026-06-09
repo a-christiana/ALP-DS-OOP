@@ -13,8 +13,7 @@ public class Appointment {
     private String complain;
     private DoctorSchedule doctorSchedule;
 
-    public Appointment(String idAppointment, Doctor doctor, Patient patient,
-            DoctorSchedule doctorSchedule, LocalTime appointmentTime, String complain) {
+    public Appointment(String idAppointment, Doctor doctor, Patient patient, DoctorSchedule doctorSchedule, LocalTime appointmentTime, String complain) {
         this.idAppointment = idAppointment;
         this.doctor = doctor;
         this.patient = patient;

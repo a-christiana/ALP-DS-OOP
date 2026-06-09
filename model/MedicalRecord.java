@@ -12,10 +12,7 @@ public class MedicalRecord {
     private String treatment;
     private Prescription prescription;
 
-    public MedicalRecord(String idMedicalRecords, Patient patient, Doctor doctor,
-                        String complaint, String diagnose, String treatment,
-                        Prescription prescription) {
-
+    public MedicalRecord(String idMedicalRecords, Patient patient, Doctor doctor, String complaint, String diagnose, String treatment, Prescription prescription) {
         this.idMedicalRecords = idMedicalRecords;
         this.patient = patient;
         this.doctor = doctor;

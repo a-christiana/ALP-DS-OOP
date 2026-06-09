@@ -14,8 +14,7 @@ public class Patient extends User {
     private ArrayList<MedicalRecord> medicalRecords;
     private ArrayList<Prescription> prescriptions;
 
-    public Patient(String idUser, String username, String password, String idPatient, String fullname, String nik,
-            String telepon) {
+    public Patient(String idUser, String username, String password, String idPatient, String fullname, String nik, String telepon) {
         super(idUser, username, password, Role.PATIENT);
         this.idPatient = idPatient;
         this.fullname = fullname;
