@@ -6,13 +6,6 @@ public abstract class User {
     protected String password;
     protected Role role;
 
-    public User() {
-        idUser = "U";
-        username = "";
-        password = "";
-        role = null;
-    }
-
     public User(String idUser, String username, String password, Role r) {
         this.idUser = idUser;
         this.username = username;
