@@ -96,10 +96,10 @@ public class DummyData {
                 x.addMedicine(m10);
 
                 Prescription pr1 = new Prescription("PR001", p1, d10);
-                Prescription pr2 = new Prescription("PR001", p2, d8);
-                Prescription pr3 = new Prescription("PR001", p3, d5);
-                Prescription pr4 = new Prescription("PR001", p4, d4);
-                Prescription pr5 = new Prescription("PR001", p5, d1);
+                Prescription pr2 = new Prescription("PR002", p2, d8);
+                Prescription pr3 = new Prescription("PR003", p3, d5);
+                Prescription pr4 = new Prescription("PR004", p4, d4);
+                Prescription pr5 = new Prescription("PR005", p5, d1);
 
                 pr1.addMedicine(m1, 2);
                 pr1.addMedicine(m2, 1);
